@@ -106,7 +106,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Fail application startup with specific error messages if any secret is missing or invalid
     - _Requirements: 14.1, 14.6, 14.8_
 
-  - [ ]* 4.4 Write property test for secret startup validation
+  - [x] 4.4 Write property test for secret startup validation
     - **Property 14: Secret Startup Validation**
     - **Validates: Requirements 14.6, 14.8**
     - Generate random configurations with missing/empty/unparseable secrets
