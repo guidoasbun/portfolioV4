@@ -112,7 +112,7 @@ sequenceDiagram
 #### Public Layout Structure
 
 ```
-app/
+frontend/src/app/
 ├── layout.tsx                  # Root layout (theme provider, fonts)
 ├── page.tsx                    # Home page (About, Projects, Experience, Skills, Contact)
 ├── resume/
@@ -441,7 +441,7 @@ portfolio-assets/
 ### Terraform Module Structure
 
 ```
-terraform/
+infrastructure/
 ├── main.tf                 # Root module, provider config
 ├── variables.tf            # Input variables
 ├── outputs.tf              # Output values
