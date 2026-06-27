@@ -20,3 +20,8 @@ variable "certificate_arn" {
   description = "ARN of the ACM certificate for HTTPS on the ALB"
   type        = string
 }
+
+variable "github_repo" {
+  description = "GitHub repository in format 'org/repo'"
+  type        = string
+}

@@ -87,3 +87,24 @@ module "compute" {
   secret_arns           = module.secrets.all_secret_arns
   cognito_user_pool_arn = module.auth.user_pool_arn
 }
+
+################################################################################
+# CI/CD Module
+################################################################################
+
+module "cicd" {
+  source = "./modules/cicd"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  ecr_repository_arn     = module.compute.ecr_repository_arn
+  ecs_cluster_arn        = module.compute.cluster_arn
+  ecs_service_arn        = module.compute.service_arn
+  secret_arns            = module.secrets.all_secret_arns
+  task_execution_role_arn = module.compute.task_execution_role_arn
+  task_role_arn          = module.compute.task_role_arn
+
+  github_org  = split("/", var.github_repo)[0]
+  github_repo = split("/", var.github_repo)[1]
+}

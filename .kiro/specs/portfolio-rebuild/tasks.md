@@ -71,7 +71,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Configure task role with IAM policies for DynamoDB, S3, Secrets Manager read access, and Cognito
     - _Requirements: 12.1, 12.8, 14.3_
 
-  - [ ] 2.7 Implement CI/CD module
+  - [x] 2.7 Implement CI/CD module
     - Create `infrastructure/modules/cicd/` with OIDC provider resource for GitHub Actions
     - Define IAM role and policy for GitHub Actions to assume via OIDC
     - Grant permissions for ECR push, ECS deploy, and Secrets Manager read
