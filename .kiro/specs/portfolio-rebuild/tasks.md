@@ -65,8 +65,8 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Define secrets for database connection details, Cognito client secrets, API keys
     - _Requirements: 12.5, 14.1_
 
-  - [ ] 2.6 Implement compute module
-    - Create `infrastructure/modules/compute/` with ECS Fargate cluster, task definition, and service
+  - [x] 2.6 Implement compute module
+    - Create `infrastructure/modules/compute/` with ECS Fargate cluster (ARM64/Graviton), task definition, and service
     - Define ECR repository for container images
     - Configure task role with IAM policies for DynamoDB, S3, Secrets Manager read access, and Cognito
     - _Requirements: 12.1, 12.8, 14.3_
@@ -419,7 +419,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
 
 - [ ] 12. CI/CD Pipeline
   - [ ] 12.1 Create Dockerfile for Next.js application
-    - Create multi-stage Dockerfile (build + production)
+    - Create multi-stage Dockerfile (build + production) targeting `linux/arm64`
     - Optimize for small image size (Alpine base)
     - Configure for standalone Next.js output
     - _Requirements: 13.1_
@@ -427,7 +427,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
   - [ ] 12.2 Create GitHub Actions workflow for build and deploy
     - Create `.github/workflows/deploy.yml` triggered on push to main
     - Run linting and type-checking as first steps (halt if failed) from `frontend/` directory
-    - Build Next.js application and Docker image from `frontend/`
+    - Build Next.js application and Docker image for `linux/arm64` (using QEMU or native ARM runner) from `frontend/`
     - Tag image with Git commit SHA
     - Authenticate to AWS via OIDC (no static keys)
     - Push image to ECR

@@ -10,9 +10,10 @@ The architecture follows a monolithic Next.js application deployed on ECS Fargat
 
 1. **Single Next.js application**: Both public and admin interfaces live in one app, simplifying deployment while using route-based code splitting to keep public bundle sizes small.
 2. **Server-side rendering for public pages**: Leverages Next.js App Router with server components for SEO and fast initial loads.
-3. **DynamoDB single-table design**: Uses a single table with composite keys and GSIs for efficient access patterns, reducing operational overhead.
-4. **S3 direct upload with presigned URLs**: Admin uploads go directly to S3 via presigned URLs, offloading file transfer from the application server.
-5. **Terraform modular structure**: Infrastructure split into logical modules (networking, compute, storage, auth, CI/CD) for maintainability.
+3. **ARM64/Graviton compute**: ECS tasks run on ARM64 (Graviton) for better price-performance. Docker images must be built for `linux/arm64`.
+4. **DynamoDB single-table design**: Uses a single table with composite keys and GSIs for efficient access patterns, reducing operational overhead.
+5. **S3 direct upload with presigned URLs**: Admin uploads go directly to S3 via presigned URLs, offloading file transfer from the application server.
+6. **Terraform modular structure**: Infrastructure split into logical modules (networking, compute, storage, auth, CI/CD) for maintainability.
 
 ## Architecture
 
@@ -31,9 +32,9 @@ graph TB
             TG[Target Group]
         end
 
-        subgraph "Compute - ECS Fargate"
+        subgraph "Compute - ECS Fargate (ARM64/Graviton)"
             SVC[ECS Service]
-            TASK[Next.js Container<br/>App Router + API Routes]
+            TASK[Next.js Container<br/>App Router + API Routes<br/>ARM64]
         end
 
         subgraph "Storage"

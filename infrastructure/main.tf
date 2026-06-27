@@ -65,3 +65,25 @@ module "secrets" {
   project_name = var.project_name
   environment  = var.environment
 }
+
+################################################################################
+# Compute Module
+################################################################################
+
+module "compute" {
+  source = "./modules/compute"
+
+  project_name = var.project_name
+  environment  = var.environment
+  aws_region   = var.aws_region
+
+  vpc_id                = module.networking.vpc_id
+  private_subnet_ids    = module.networking.private_subnet_ids
+  ecs_security_group_id = module.networking.ecs_security_group_id
+  alb_target_group_arn  = module.networking.alb_target_group_arn
+
+  dynamodb_table_arn    = module.storage.dynamodb_table_arn
+  s3_bucket_arn         = module.storage.s3_bucket_arn
+  secret_arns           = module.secrets.all_secret_arns
+  cognito_user_pool_arn = module.auth.user_pool_arn
+}
