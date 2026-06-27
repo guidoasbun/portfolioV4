@@ -106,10 +106,17 @@ export async function POST(request: Request): Promise<Response> {
     // Validate request body
     const parseResult = createProjectRequestSchema.safeParse(body);
     if (!parseResult.success) {
+      const errors: Record<string, string> = {};
+      for (const issue of parseResult.error.issues) {
+        const field = issue.path[0] as string;
+        if (!errors[field]) {
+          errors[field] = issue.message;
+        }
+      }
       const response: ApiResponse = {
         success: false,
         error: "Validation failed",
-        errors: parseResult.error.flatten().fieldErrors as Record<string, string>,
+        errors,
       };
       return Response.json(response, { status: 400 });
     }
@@ -136,7 +143,7 @@ export async function POST(request: Request): Promise<Response> {
       updatedAt: now,
     });
 
-    const project: Omit<Project, "images"> = {
+    const project: Project = {
       id: projectId,
       title: data.title,
       description: data.description,
@@ -149,9 +156,9 @@ export async function POST(request: Request): Promise<Response> {
       updatedAt: now,
     };
 
-    const response: ApiResponse<Omit<Project, "images"> & { images: ProjectImage[] }> = {
+    const response: ApiResponse<Project> = {
       success: true,
-      data: { ...project, images: [] },
+      data: project,
     };
 
     return Response.json(response, { status: 201 });

@@ -77,10 +77,17 @@ export async function POST(request: Request): Promise<Response> {
     const parseResult = createExperienceRequestSchema.safeParse(body);
 
     if (!parseResult.success) {
+      const errors: Record<string, string> = {};
+      for (const issue of parseResult.error.issues) {
+        const field = issue.path[0] as string;
+        if (!errors[field]) {
+          errors[field] = issue.message;
+        }
+      }
       const response: ApiResponse = {
         success: false,
         error: "Invalid request body",
-        errors: parseResult.error.flatten().fieldErrors as Record<string, string>,
+        errors,
       };
       return Response.json(response, { status: 400 });
     }

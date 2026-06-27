@@ -52,10 +52,17 @@ export async function PUT(
     // Validate request body
     const parseResult = reorderRequestSchema.safeParse(body);
     if (!parseResult.success) {
+      const errors: Record<string, string> = {};
+      for (const issue of parseResult.error.issues) {
+        const field = issue.path[0] as string;
+        if (!errors[field]) {
+          errors[field] = issue.message;
+        }
+      }
       const response: ApiResponse = {
         success: false,
         error: "Validation failed",
-        errors: parseResult.error.flatten().fieldErrors as Record<string, string>,
+        errors,
       };
       return Response.json(response, { status: 400 });
     }
@@ -98,6 +105,16 @@ export async function PUT(
         };
         return Response.json(response, { status: 400 });
       }
+    }
+
+    // Validate no duplicate order values (would overwrite at same SK)
+    const orderValues = reorderData.map((item) => item.order);
+    if (new Set(orderValues).size !== orderValues.length) {
+      const response: ApiResponse = {
+        success: false,
+        error: "Duplicate order values are not allowed",
+      };
+      return Response.json(response, { status: 400 });
     }
 
     // For each reorder entry: delete old item and put with new SK
