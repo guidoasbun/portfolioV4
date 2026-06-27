@@ -117,7 +117,7 @@ function configureMockForSecret(
     return { response: { SecretString: buildValidSecret(secretIndex) } };
   }
 
-  const secret = SECRETS[secretIndex];
+  const secret = SECRETS[secretIndex]!;
 
   switch (config.invalidState) {
     case "throws":
@@ -139,7 +139,7 @@ function configureMockForSecret(
       const fields: Record<string, string> = {};
       for (let i = 0; i < secret.requiredFields.length; i++) {
         if (i !== fieldIdx) {
-          fields[secret.requiredFields[i]] = "validValue";
+          fields[secret.requiredFields[i]!] = "validValue";
         }
       }
       return { response: { SecretString: JSON.stringify(fields) } };
@@ -154,9 +154,9 @@ function configureMockForSecret(
       const fields: Record<string, string> = {};
       for (let i = 0; i < secret.requiredFields.length; i++) {
         if (i === fieldIdx) {
-          fields[secret.requiredFields[i]] = "   "; // whitespace-only
+          fields[secret.requiredFields[i]!] = "   "; // whitespace-only
         } else {
-          fields[secret.requiredFields[i]] = "validValue";
+          fields[secret.requiredFields[i]!] = "validValue";
         }
       }
       return { response: { SecretString: JSON.stringify(fields) } };
@@ -267,7 +267,7 @@ describe("Property 14: Secret Startup Validation", () => {
         const { loadSecrets, clearSecretsCache } = await import("./secrets");
         clearSecretsCache();
 
-        const secret = SECRETS[config.index];
+        const secret = SECRETS[config.index]!;
 
         // Skip field-level tests for apiKeys (no required fields)
         if (

@@ -102,27 +102,27 @@ export default async function About() {
           />
         ) : (
           <div className="flex flex-col gap-xl">
-            {aboutContent.personalDescription && (
+            {aboutContent!.personalDescription && (
               <ScrollAnimation animation="slide-up">
                 <div className="rounded-lg border border-border bg-surface p-lg">
                   <h3 className="mb-sm text-foreground">
                     Who I Am
                   </h3>
                   <p className="text-lg leading-relaxed text-foreground-muted">
-                    {aboutContent.personalDescription}
+                    {aboutContent!.personalDescription}
                   </p>
                 </div>
               </ScrollAnimation>
             )}
 
-            {aboutContent.professionalPitch && (
+            {aboutContent!.professionalPitch && (
               <ScrollAnimation animation="slide-up">
                 <div className="rounded-lg border border-border bg-surface p-lg">
                   <h3 className="mb-sm text-foreground">
                     What I Do
                   </h3>
                   <p className="text-lg leading-relaxed text-foreground-muted">
-                    {aboutContent.professionalPitch}
+                    {aboutContent!.professionalPitch}
                   </p>
                 </div>
               </ScrollAnimation>

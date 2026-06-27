@@ -366,7 +366,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Ensure proper section IDs for scroll navigation
     - _Requirements: 1.1, 16.1_
 
-- [ ] 10. Checkpoint - Public frontend validation
+- [x] 10. Checkpoint - Public frontend validation
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 11. Admin panel

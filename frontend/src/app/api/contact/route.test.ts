@@ -10,7 +10,7 @@ import { describe, expect, it, jest, beforeEach } from "@jest/globals";
 
 // ─── Mocks ──────────────────────────────────────────────────────────────────
 
-const mockPutItem = jest.fn<() => Promise<void>>();
+const mockPutItem = jest.fn<(...args: unknown[]) => Promise<void>>();
 
 jest.mock("@/lib/dynamodb", () => ({
   putItem: (...args: unknown[]) => mockPutItem(...args),
@@ -52,7 +52,6 @@ describe("POST /api/contact", () => {
     mockPutItem.mockReset();
     mockPutItem.mockResolvedValue(undefined);
 
-    // Re-mock after resetModules
     jest.mock("@/lib/dynamodb", () => ({
       putItem: (...args: unknown[]) => mockPutItem(...args),
       Keys: {
@@ -97,7 +96,7 @@ describe("POST /api/contact", () => {
       await POST(request);
 
       expect(mockPutItem).toHaveBeenCalledTimes(1);
-      const savedItem = mockPutItem.mock.calls[0][0] as Record<string, unknown>;
+      const savedItem = mockPutItem.mock.calls[0]![0] as Record<string, unknown>;
 
       expect(savedItem.type).toBe("message");
       expect(savedItem.name).toBe("Jane Doe");
@@ -121,7 +120,7 @@ describe("POST /api/contact", () => {
 
       await POST(request);
 
-      const savedItem = mockPutItem.mock.calls[0][0] as Record<string, unknown>;
+      const savedItem = mockPutItem.mock.calls[0]![0] as Record<string, unknown>;
       expect(savedItem.name).toBe("Jane Doe");
       expect(savedItem.email).toBe("jane@example.com");
       expect(savedItem.body).toBe("Hello");

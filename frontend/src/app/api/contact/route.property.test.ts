@@ -20,7 +20,7 @@ import * as fc from "fast-check";
 
 // ─── Mocks ──────────────────────────────────────────────────────────────────
 
-const mockPutItem = jest.fn<() => Promise<void>>();
+const mockPutItem = jest.fn<(...args: unknown[]) => Promise<void>>();
 
 jest.mock("@/lib/dynamodb", () => ({
   putItem: (...args: unknown[]) => mockPutItem(...args),
@@ -95,7 +95,6 @@ describe("Property 9: Message Persistence Integrity", () => {
     mockPutItem.mockReset();
     mockPutItem.mockResolvedValue(undefined);
 
-    // Re-mock after resetModules
     jest.mock("@/lib/dynamodb", () => ({
       putItem: (...args: unknown[]) => mockPutItem(...args),
       Keys: {
@@ -122,7 +121,7 @@ describe("Property 9: Message Persistence Integrity", () => {
         await POST(request);
 
         expect(mockPutItem).toHaveBeenCalledTimes(1);
-        const savedItem = mockPutItem.mock.calls[0][0] as Record<string, unknown>;
+        const savedItem = mockPutItem.mock.calls[0]![0] as Record<string, unknown>;
         expect(savedItem.name).toBe(name.trim());
       }),
       { numRuns: 100 },
@@ -139,7 +138,7 @@ describe("Property 9: Message Persistence Integrity", () => {
         await POST(request);
 
         expect(mockPutItem).toHaveBeenCalledTimes(1);
-        const savedItem = mockPutItem.mock.calls[0][0] as Record<string, unknown>;
+        const savedItem = mockPutItem.mock.calls[0]![0] as Record<string, unknown>;
         expect(savedItem.email).toBe(email.trim());
       }),
       { numRuns: 100 },
@@ -156,7 +155,7 @@ describe("Property 9: Message Persistence Integrity", () => {
         await POST(request);
 
         expect(mockPutItem).toHaveBeenCalledTimes(1);
-        const savedItem = mockPutItem.mock.calls[0][0] as Record<string, unknown>;
+        const savedItem = mockPutItem.mock.calls[0]![0] as Record<string, unknown>;
         expect(savedItem.body).toBe(message.trim());
       }),
       { numRuns: 100 },
@@ -173,7 +172,7 @@ describe("Property 9: Message Persistence Integrity", () => {
         await POST(request);
 
         expect(mockPutItem).toHaveBeenCalledTimes(1);
-        const savedItem = mockPutItem.mock.calls[0][0] as Record<string, unknown>;
+        const savedItem = mockPutItem.mock.calls[0]![0] as Record<string, unknown>;
         expect(typeof savedItem.submittedAt).toBe("string");
         expect(isValidISO8601(savedItem.submittedAt as string)).toBe(true);
       }),
@@ -191,7 +190,7 @@ describe("Property 9: Message Persistence Integrity", () => {
         await POST(request);
 
         expect(mockPutItem).toHaveBeenCalledTimes(1);
-        const savedItem = mockPutItem.mock.calls[0][0] as Record<string, unknown>;
+        const savedItem = mockPutItem.mock.calls[0]![0] as Record<string, unknown>;
         expect(savedItem.isRead).toBe(false);
       }),
       { numRuns: 100 },

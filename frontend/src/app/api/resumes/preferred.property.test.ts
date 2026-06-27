@@ -68,7 +68,7 @@ const resumeSetWithTargetArb = fc
       .chain((ids) => {
         // Pick a random target from the set
         return fc.integer({ min: 0, max: ids.length - 1 }).chain((targetIdx) => {
-          const targetId = ids[targetIdx];
+          const targetId = ids[targetIdx]!;
 
           // Generate random preferred states for each resume
           return fc.tuple(

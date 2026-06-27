@@ -46,9 +46,16 @@ function ScrollAnimation({
 }: ScrollAnimationProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return false;
+    try {
+      return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    } catch {
+      return false;
+    }
+  });
 
-  // Check prefers-reduced-motion
+  // Listen for prefers-reduced-motion changes
   useEffect(() => {
     if (typeof window === "undefined" || !window.matchMedia) {
       return;
@@ -61,7 +68,6 @@ function ScrollAnimation({
       return;
     }
 
-    setPrefersReducedMotion(mql.matches);
     const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
 
     if (mql.addEventListener) {

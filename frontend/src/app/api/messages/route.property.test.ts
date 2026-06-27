@@ -80,7 +80,7 @@ function messageItemArb(index: number) {
  * Generate an array of 1-50 message items, pre-sorted by submittedAt descending
  * (simulating DynamoDB GSI1 with scanIndexForward: false).
  */
-const messagesArb: fc.Arbitrary<ReturnType<typeof messageItemArb extends (...args: unknown[]) => fc.Arbitrary<infer T> ? () => T : never>[]> = fc
+const messagesArb = fc
   .integer({ min: 1, max: 50 })
   .chain((count) =>
     fc.tuple(...Array.from({ length: count }, (_, i) => messageItemArb(i))),
@@ -144,8 +144,8 @@ describe("Property 13: Message Listing Order and Pagination", () => {
 
         const items = data.data.items as { submittedAt: string }[];
         for (let i = 0; i < items.length - 1; i++) {
-          const current = new Date(items[i].submittedAt).getTime();
-          const next = new Date(items[i + 1].submittedAt).getTime();
+          const current = new Date(items[i]!.submittedAt).getTime();
+          const next = new Date(items[i + 1]!.submittedAt).getTime();
           expect(current).toBeGreaterThanOrEqual(next);
         }
       }),
@@ -206,11 +206,11 @@ describe("Property 13: Message Listing Order and Pagination", () => {
         const responseItems = data.data.items as { body: string }[];
 
         for (let i = 0; i < responseItems.length; i++) {
-          const originalBody = pageItems[i].body;
+          const originalBody = pageItems[i]!.body;
           if (originalBody.length > 100) {
-            expect(responseItems[i].body).toBe(originalBody.slice(0, 100) + "...");
+            expect(responseItems[i]!.body).toBe(originalBody.slice(0, 100) + "...");
           } else {
-            expect(responseItems[i].body).toBe(originalBody);
+            expect(responseItems[i]!.body).toBe(originalBody);
           }
         }
       }),
