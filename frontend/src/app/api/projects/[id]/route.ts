@@ -127,15 +127,32 @@ export async function PUT(
     // Validate request body
     const parseResult = updateProjectRequestSchema.safeParse(body);
     if (!parseResult.success) {
+      const errors: Record<string, string> = {};
+      for (const issue of parseResult.error.issues) {
+        const field = issue.path[0] as string;
+        if (!errors[field]) {
+          errors[field] = issue.message;
+        }
+      }
       const response: ApiResponse = {
         success: false,
         error: "Validation failed",
-        errors: parseResult.error.flatten().fieldErrors as Record<string, string>,
+        errors,
       };
       return Response.json(response, { status: 400 });
     }
 
     const data = parseResult.data;
+
+    // Reject empty updates to avoid unnecessary writes
+    const hasUpdates = Object.values(data).some((v) => v !== undefined);
+    if (!hasUpdates) {
+      const response: ApiResponse = {
+        success: false,
+        error: "At least one field must be provided for update",
+      };
+      return Response.json(response, { status: 400 });
+    }
 
     // Check if project exists
     const existing = await getItem<ProjectDynamoItem>({
