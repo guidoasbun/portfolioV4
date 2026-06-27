@@ -43,3 +43,14 @@ module "storage" {
   project_name = var.project_name
   environment  = var.environment
 }
+
+################################################################################
+# Auth Module
+################################################################################
+
+module "auth" {
+  source = "./modules/auth"
+
+  project_name = var.project_name
+  environment  = var.environment
+}

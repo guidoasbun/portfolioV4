@@ -54,7 +54,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Create S3 bucket with public read access for assets and CORS configuration
     - _Requirements: 12.2, 12.3_
 
-  - [ ] 2.4 Implement auth module
+  - [x] 2.4 Implement auth module
     - Create `infrastructure/modules/auth/` with Cognito User Pool and client
     - Configure password policy, account lockout (5 attempts, 15min lock)
     - Set token expiration to 1 hour
