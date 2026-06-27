@@ -20,14 +20,14 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Define API request/response types
     - _Requirements: 5.1, 6.1, 7.1, 8.1, 3.1, 10.1_
 
-  - [ ] 1.3 Set up design system tokens and theme configuration
+  - [x] 1.3 Set up design system tokens and theme configuration
     - Define CSS custom properties for color palette (max 6 primary colors), spacing scale, and typographic scale (max 5 heading levels)
     - Implement `data-theme` attribute toggling for dark/light themes
     - Configure Tailwind theme with custom design tokens
     - Set up transitions for background-color and color (≤300ms)
     - _Requirements: 15.5, 15.6, 17.2_
 
-  - [ ] 1.4 Set up testing framework
+  - [x] 1.4 Set up testing framework
     - Configure Jest with React Testing Library for unit tests
     - Configure fast-check for property-based tests
     - Configure Playwright for E2E tests
