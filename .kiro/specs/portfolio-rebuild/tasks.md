@@ -127,7 +127,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Implement meta tag validation (title ≤60 chars, description ≤160 chars)
     - _Requirements: 3.1, 3.7, 8.3, 10.4, 10.5, 10.6, 16.2_
 
-  - [ ]* 4.7 Write property tests for validation utilities
+  - [x] 4.7 Write property tests for validation utilities
     - **Property 1: Resume File Validation**
     - **Validates: Requirements 3.1, 3.7**
     - Generate random file types and sizes; verify only PDF ≤10MB accepted
