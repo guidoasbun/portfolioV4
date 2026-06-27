@@ -187,6 +187,31 @@ export async function queryItems<T extends DynamoDBItem>(
 }
 
 /**
+ * Query all items matching a key condition, automatically paginating
+ * through all DynamoDB pages until no lastEvaluatedKey remains.
+ * Use this when you need the complete result set (e.g., listing all published projects).
+ *
+ * Note: Do not pass `limit` in options — it limits per-page results, not total.
+ */
+export async function queryAllItems<T extends DynamoDBItem>(
+  options: Omit<QueryOptions, "exclusiveStartKey" | "limit">,
+): Promise<T[]> {
+  const allItems: T[] = [];
+  let exclusiveStartKey: Record<string, NativeAttributeValue> | undefined;
+
+  do {
+    const { items, lastEvaluatedKey } = await queryItems<T>({
+      ...options,
+      exclusiveStartKey,
+    });
+    allItems.push(...items);
+    exclusiveStartKey = lastEvaluatedKey;
+  } while (exclusiveStartKey);
+
+  return allItems;
+}
+
+/**
  * Delete an item by its primary key (PK + SK).
  */
 export async function deleteItem(key: DynamoDBKey): Promise<void> {

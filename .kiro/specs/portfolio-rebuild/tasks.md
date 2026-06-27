@@ -152,56 +152,56 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - **Validates: Requirements 16.2**
     - Generate random metadata; verify title ≤60 chars, description ≤160 chars
 
-- [ ] 5. API routes - Public endpoints
-  - [ ] 5.1 Implement GET /api/projects and GET /api/projects/[id]
+- [x] 5. API routes - Public endpoints
+  - [x] 5.1 Implement GET /api/projects and GET /api/projects/[id]
     - Query DynamoDB GSI for published projects ordered by displayOrder
     - Return project list with images for grid display
     - Return single project with full details including image gallery data
     - _Requirements: 5.1, 5.2, 5.4_
 
-  - [ ]* 5.2 Write property test for published project filtering
+  - [x] 5.2 Write property test for published project filtering
     - **Property 4: Published Project Filtering**
     - **Validates: Requirements 5.1**
     - Generate random projects with mixed published status; verify only published returned
 
-  - [ ]* 5.3 Write property test for admin-defined display ordering (projects)
+  - [x] 5.3 Write property test for admin-defined display ordering (projects)
     - **Property 3: Admin-Defined Display Ordering**
     - **Validates: Requirements 4.2, 5.4, 7.2**
     - Generate random items with display order values; verify ascending sort in output
 
-  - [ ] 5.4 Implement GET /api/experience
+  - [x] 5.4 Implement GET /api/experience
     - Query DynamoDB GSI for experience entries sorted by start date descending
     - Return experience list in reverse chronological order
     - _Requirements: 6.1, 6.2_
 
-  - [ ]* 5.5 Write property test for experience reverse chronological ordering
+  - [x] 5.5 Write property test for experience reverse chronological ordering
     - **Property 5: Experience Reverse Chronological Ordering**
     - **Validates: Requirements 6.1**
     - Generate random experience entries with dates; verify descending sort by start date
 
-  - [ ] 5.6 Implement GET /api/skills
+  - [x] 5.6 Implement GET /api/skills
     - Query DynamoDB for skills grouped by category with display order
     - Filter out empty categories
     - Return skills grouped by category label
     - _Requirements: 7.1, 7.2, 7.4_
 
-  - [ ]* 5.7 Write property test for skills grouping and empty category filtering
+  - [x] 5.7 Write property test for skills grouping and empty category filtering
     - **Property 7: Skills Grouping and Empty Category Filtering**
     - **Validates: Requirements 7.1, 7.4**
     - Generate random skills/categories; verify correct grouping and empty category exclusion
 
-  - [ ] 5.8 Implement GET /api/about and GET /api/resumes/preferred
+  - [x] 5.8 Implement GET /api/about and GET /api/resumes/preferred
     - Return about content (personal description + professional pitch)
     - Return presigned download URL for the preferred resume PDF
     - _Requirements: 2.1, 2.2, 2.3_
 
-  - [ ] 5.9 Implement POST /api/contact
+  - [x] 5.9 Implement POST /api/contact
     - Validate contact form input (name, email, body)
     - Save message to DynamoDB with submission timestamp and isRead=false
     - Return success confirmation or field-specific validation errors
     - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
 
-  - [ ]* 5.10 Write property test for message persistence integrity
+  - [x] 5.10 Write property test for message persistence integrity
     - **Property 9: Message Persistence Integrity**
     - **Validates: Requirements 8.4**
     - Generate random valid messages; verify stored record matches original with valid ISO 8601 timestamp
