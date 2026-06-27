@@ -132,7 +132,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - **Validates: Requirements 3.1, 3.7**
     - Generate random file types and sizes; verify only PDF ≤10MB accepted
 
-  - [ ]* 4.8 Write property test for image upload validation
+  - [x] 4.8 Write property test for image upload validation
     - **Property 12: Image Upload Validation**
     - **Validates: Requirements 10.5, 10.6**
     - Generate random file types, sizes, and image counts; verify correct accept/reject
