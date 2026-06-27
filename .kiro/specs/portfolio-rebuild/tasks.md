@@ -34,7 +34,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Add test scripts to `package.json`
     - _Requirements: 16.4_
 
-- [ ] 2. Terraform infrastructure modules
+- [x] 2. Terraform infrastructure modules
   - [x] 2.1 Create Terraform project structure and backend configuration
     - Create `infrastructure/` directory structure with `main.tf`, `variables.tf`, `outputs.tf`, `backend.tf`
     - Create `environments/prod/terraform.tfvars` and `backend.tfvars`
@@ -77,17 +77,17 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Grant permissions for ECR push, ECS deploy, and Secrets Manager read
     - _Requirements: 12.6, 13.3, 14.2_
 
-  - [ ] 2.8 Validate Terraform configuration
+  - [x] 2.8 Validate Terraform configuration
     - Run `terraform validate` in `infrastructure/` to ensure no errors
     - Run `terraform plan` to verify expected resource set
     - Fix any validation errors
     - _Requirements: 12.9_
 
-- [ ] 3. Checkpoint - Infrastructure validation
+- [x] 3. Checkpoint - Infrastructure validation
   - Ensure all Terraform modules validate successfully, ask the user if questions arise.
 
 - [ ] 4. Data access layer and utilities
-  - [ ] 4.1 Implement DynamoDB client and single-table helpers
+  - [x] 4.1 Implement DynamoDB client and single-table helpers
     - Create `frontend/src/lib/dynamodb.ts` with DynamoDB Document Client initialization
     - Implement helper functions for key generation (PK/SK patterns for each entity)
     - Implement generic get, put, query, delete, and update operations
