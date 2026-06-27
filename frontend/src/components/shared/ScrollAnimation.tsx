@@ -50,11 +50,27 @@ function ScrollAnimation({
 
   // Check prefers-reduced-motion
   useEffect(() => {
-    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (typeof window === "undefined" || !window.matchMedia) {
+      return;
+    }
+
+    let mql: MediaQueryList;
+    try {
+      mql = window.matchMedia("(prefers-reduced-motion: reduce)");
+    } catch {
+      return;
+    }
+
     setPrefersReducedMotion(mql.matches);
     const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    mql.addEventListener("change", handler);
-    return () => mql.removeEventListener("change", handler);
+
+    if (mql.addEventListener) {
+      mql.addEventListener("change", handler);
+      return () => mql.removeEventListener("change", handler);
+    }
+    // Fallback for older Safari / embedded WebViews
+    mql.addListener(handler);
+    return () => mql.removeListener(handler);
   }, []);
 
   // Set up IntersectionObserver

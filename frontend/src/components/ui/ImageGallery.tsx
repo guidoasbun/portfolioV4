@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export interface GalleryImage {
   src: string;
@@ -20,7 +20,7 @@ export interface ImageGalleryProps {
 function ImageGallery({ images, height = 300, className = "" }: ImageGalleryProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
   const updateScrollState = useCallback(() => {
     const el = scrollRef.current;
@@ -28,6 +28,11 @@ function ImageGallery({ images, height = 300, className = "" }: ImageGalleryProp
     setCanScrollLeft(el.scrollLeft > 0);
     setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
   }, []);
+
+  // Initialize scroll state after mount and when images change
+  useEffect(() => {
+    updateScrollState();
+  }, [updateScrollState, images]);
 
   const scroll = useCallback((direction: "left" | "right") => {
     const el = scrollRef.current;
@@ -71,6 +76,7 @@ function ImageGallery({ images, height = 300, className = "" }: ImageGalleryProp
       {/* Left navigation button */}
       {canScrollLeft && (
         <button
+          type="button"
           onClick={() => scroll("left")}
           className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-surface-elevated/90 p-2 shadow-md transition-opacity duration-200 opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           aria-label="Scroll gallery left"
@@ -96,6 +102,7 @@ function ImageGallery({ images, height = 300, className = "" }: ImageGalleryProp
       {/* Right navigation button */}
       {canScrollRight && images.length > 1 && (
         <button
+          type="button"
           onClick={() => scroll("right")}
           className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-surface-elevated/90 p-2 shadow-md transition-opacity duration-200 opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           aria-label="Scroll gallery right"

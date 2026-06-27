@@ -115,6 +115,7 @@ export default function MobileMenu({
     <>
       {/* Hamburger toggle button - visible below md (768px) */}
       <button
+        type="button"
         ref={toggleButtonRef}
         onClick={onToggle}
         aria-expanded={isOpen}
@@ -174,9 +175,11 @@ export default function MobileMenu({
         {/* Close button */}
         <div className="flex items-center justify-end p-md">
           <button
+            type="button"
             ref={closeButtonRef}
             onClick={onClose}
             aria-label="Close menu"
+            tabIndex={isOpen ? 0 : -1}
             className={[
               "inline-flex items-center justify-center",
               "min-w-[44px] min-h-[44px] rounded-md",
@@ -215,6 +218,7 @@ export default function MobileMenu({
                     href={link.href}
                     onClick={(e) => handleNavClick(e, sectionId)}
                     aria-current={isActive ? "page" : undefined}
+                    tabIndex={isOpen ? 0 : -1}
                     className={[
                       "flex items-center",
                       "min-h-[44px] min-w-[44px] px-md py-sm",
@@ -236,7 +240,7 @@ export default function MobileMenu({
 
         {/* Theme toggle */}
         <div className="mt-auto border-t border-border px-md py-md">
-          <ThemeToggle className="w-full justify-start" />
+          <ThemeToggle className="w-full justify-start" tabIndex={isOpen ? 0 : -1} />
         </div>
       </div>
     </>

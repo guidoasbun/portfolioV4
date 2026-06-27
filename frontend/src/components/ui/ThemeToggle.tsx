@@ -4,17 +4,20 @@ import { useTheme } from "../shared/ThemeProvider";
 
 export interface ThemeToggleProps {
   className?: string;
+  tabIndex?: number;
 }
 
-function ThemeToggle({ className = "" }: ThemeToggleProps) {
+function ThemeToggle({ className = "", tabIndex }: ThemeToggleProps) {
   const { theme, toggleTheme } = useTheme();
 
   const label = theme === "light" ? "Switch to dark theme" : "Switch to light theme";
 
   return (
     <button
+      type="button"
       onClick={toggleTheme}
       aria-label={label}
+      tabIndex={tabIndex}
       className={[
         "inline-flex items-center justify-center",
         "min-w-[44px] min-h-[44px] rounded-md",

@@ -105,7 +105,7 @@ export default function Header() {
                   <a
                     href={link.href}
                     onClick={(e) => handleNavClick(e, sectionId)}
-                    aria-current={isActive ? "true" : undefined}
+                    aria-current={isActive ? "page" : undefined}
                     className={[
                       "relative px-sm py-xs text-sm font-medium rounded-sm",
                       "transition-colors duration-200",
