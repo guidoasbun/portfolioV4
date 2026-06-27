@@ -93,7 +93,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Implement generic get, put, query, delete, and update operations
     - _Requirements: 8.4, 10.1, 10.2_
 
-  - [-] 4.2 Implement S3 client and presigned URL generation
+  - [x] 4.2 Implement S3 client and presigned URL generation
     - Create `frontend/src/lib/s3.ts` with S3 client initialization
     - Implement presigned URL generation for uploads (1hr expiry)
     - Implement asset URL generation for public access
