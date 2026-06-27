@@ -7,14 +7,14 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
 ## Tasks
 
 - [ ] 1. Project scaffolding and core configuration
-  - [ ] 1.1 Initialize Next.js project with App Router and TypeScript
+  - [x] 1.1 Initialize Next.js project with App Router and TypeScript
     - Create Next.js app with `create-next-app` using App Router, TypeScript, Tailwind CSS
     - Configure `tsconfig.json` with strict mode and path aliases
     - Set up ESLint and Prettier configuration
     - Create `.env.local.example` with all required environment variable names (no values)
     - _Requirements: 12.1, 14.1_
 
-  - [ ] 1.2 Define core TypeScript interfaces and data models
+  - [x] 1.2 Define core TypeScript interfaces and data models
     - Create `src/types/` directory with interfaces for Project, Experience, Skill, SkillCategory, About, Resume, Message, WebResume as defined in design
     - Create validation schemas using Zod for each entity
     - Define API request/response types
