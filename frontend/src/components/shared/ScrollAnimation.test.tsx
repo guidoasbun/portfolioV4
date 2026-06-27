@@ -8,6 +8,7 @@ const mockUnobserve = jest.fn();
 const mockDisconnect = jest.fn();
 
 beforeEach(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (window as any).IntersectionObserver = jest.fn((cb: IntersectionObserverCallback) => {
     observerCallback = cb;
     return {

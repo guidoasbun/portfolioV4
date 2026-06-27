@@ -64,7 +64,7 @@ describe("Property 4: Published Project Filtering", () => {
 
   it("returns only published projects and excludes all unpublished projects", async () => {
     await fc.assert(
-      fc.asyncProperty(mixedProjectsArb, async ({ allProjects, publishedProjects, unpublishedProjects }) => {
+      fc.asyncProperty(mixedProjectsArb, async ({ publishedProjects, unpublishedProjects }) => {
         jest.resetModules();
 
         // The route handler uses queryAllItems which auto-paginates.

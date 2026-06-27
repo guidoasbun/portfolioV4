@@ -59,7 +59,7 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-border bg-surface px-md py-lg">
-      <div className="mx-auto flex max-w-7xl flex-col items-center gap-md sm:flex-row sm:justify-between">
+      <div className="mx-auto flex max-w-[80rem] flex-col items-center gap-md sm:flex-row sm:justify-between">
         <nav aria-label="Social media links" className="flex gap-lg">
           {socialLinks.map((link) => {
             const isExternal = link.href.startsWith("http");

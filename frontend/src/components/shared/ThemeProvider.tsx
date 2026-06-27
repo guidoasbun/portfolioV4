@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 
@@ -64,23 +65,26 @@ function persistTheme(theme: Theme): void {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light");
-  const [mounted, setMounted] = useState(false);
+  const [theme, setTheme] = useState<Theme>(() =>
+    typeof window !== "undefined"
+      ? resolveTheme(getStoredTheme(), getOSPreference())
+      : "light",
+  );
+  const mountedRef = useRef(false);
 
-  // Resolve theme on mount: localStorage → OS preference → light default
+  // Apply theme to DOM on mount
   useEffect(() => {
-    const resolved = resolveTheme(getStoredTheme(), getOSPreference());
-    setTheme(resolved);
-    document.documentElement.setAttribute("data-theme", resolved);
-    setMounted(true);
+    document.documentElement.setAttribute("data-theme", theme);
+    mountedRef.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Sync data-theme attribute whenever theme changes (after mount)
   useEffect(() => {
-    if (mounted) {
+    if (mountedRef.current) {
       document.documentElement.setAttribute("data-theme", theme);
     }
-  }, [theme, mounted]);
+  }, [theme]);
 
   const toggleTheme = useCallback(() => {
     setTheme((prev) => {

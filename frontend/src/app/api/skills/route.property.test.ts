@@ -144,7 +144,7 @@ function setupMock(
   // First call: return categories
   mockQueryItems.mockImplementation(async (options: unknown) => {
     const opts = options as { expressionAttributeValues: Record<string, string> };
-    const gsi1pk = opts.expressionAttributeValues[":gsi1pk"];
+    const gsi1pk = opts.expressionAttributeValues[":gsi1pk"] ?? "";
 
     if (gsi1pk === "SKILLCATS") {
       return {

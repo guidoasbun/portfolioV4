@@ -143,7 +143,7 @@ describe("Property 5: Experience Reverse Chronological Ordering", () => {
         );
 
         for (let i = 0; i < startDates.length - 1; i++) {
-          expect(startDates[i] >= startDates[i + 1]).toBe(true);
+          expect(startDates[i]! >= startDates[i + 1]!).toBe(true);
         }
       }),
       { numRuns: 100 },
