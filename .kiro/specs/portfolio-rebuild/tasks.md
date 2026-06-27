@@ -86,7 +86,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
 - [x] 3. Checkpoint - Infrastructure validation
   - Ensure all Terraform modules validate successfully, ask the user if questions arise.
 
-- [ ] 4. Data access layer and utilities
+- [x] 4. Data access layer and utilities
   - [x] 4.1 Implement DynamoDB client and single-table helpers
     - Create `frontend/src/lib/dynamodb.ts` with DynamoDB Document Client initialization
     - Implement helper functions for key generation (PK/SK patterns for each entity)
@@ -100,25 +100,25 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Implement file deletion helper
     - _Requirements: 3.1, 10.5_
 
-  - [ ] 4.3 Implement secrets manager client and startup validation
+  - [x] 4.3 Implement secrets manager client and startup validation
     - Create `frontend/src/lib/secrets.ts` with Secrets Manager client
     - Implement startup validation that checks all required secrets are present and parseable
     - Fail application startup with specific error messages if any secret is missing or invalid
     - _Requirements: 14.1, 14.6, 14.8_
 
-  - [ ]* 4.4 Write property test for secret startup validation
+  - [x] 4.4 Write property test for secret startup validation
     - **Property 14: Secret Startup Validation**
     - **Validates: Requirements 14.6, 14.8**
     - Generate random configurations with missing/empty/unparseable secrets
     - Verify startup fails with error identifying the specific invalid secret
 
-  - [ ] 4.5 Implement Cognito auth helpers
+  - [x] 4.5 Implement Cognito auth helpers
     - Create `frontend/src/lib/auth.ts` with token verification using Cognito JWKS
     - Implement middleware helper for extracting and validating JWT from cookies/headers
     - Implement login, logout, and token refresh flows
     - _Requirements: 9.1, 9.2, 9.5, 9.6_
 
-  - [ ] 4.6 Implement validation utilities
+  - [x] 4.6 Implement validation utilities
     - Create `frontend/src/lib/validation.ts` with Zod-based validators for all entities
     - Implement resume file validation (PDF only, ≤10MB)
     - Implement image upload validation (JPEG/PNG/WebP, ≤5MB, max 10 per project)
@@ -127,27 +127,27 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Implement meta tag validation (title ≤60 chars, description ≤160 chars)
     - _Requirements: 3.1, 3.7, 8.3, 10.4, 10.5, 10.6, 16.2_
 
-  - [ ]* 4.7 Write property tests for validation utilities
+  - [x] 4.7 Write property tests for validation utilities
     - **Property 1: Resume File Validation**
     - **Validates: Requirements 3.1, 3.7**
     - Generate random file types and sizes; verify only PDF ≤10MB accepted
 
-  - [ ]* 4.8 Write property test for image upload validation
+  - [x] 4.8 Write property test for image upload validation
     - **Property 12: Image Upload Validation**
     - **Validates: Requirements 10.5, 10.6**
     - Generate random file types, sizes, and image counts; verify correct accept/reject
 
-  - [ ]* 4.9 Write property test for contact form validation
+  - [x] 4.9 Write property test for contact form validation
     - **Property 8: Contact Form Validation**
     - **Validates: Requirements 8.3**
     - Generate random invalid inputs; verify field-specific error identifiers returned
 
-  - [ ]* 4.10 Write property test for project form validation
+  - [x] 4.10 Write property test for project form validation
     - **Property 11: Project Form Validation**
     - **Validates: Requirements 10.4**
     - Generate random forms missing title or description; verify rejection with correct errors
 
-  - [ ]* 4.11 Write property test for meta tag constraints
+  - [x] 4.11 Write property test for meta tag constraints
     - **Property 15: Meta Tag Character Constraints**
     - **Validates: Requirements 16.2**
     - Generate random metadata; verify title ≤60 chars, description ≤160 chars
