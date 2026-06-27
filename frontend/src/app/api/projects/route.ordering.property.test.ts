@@ -24,10 +24,12 @@ jest.mock("server-only", () => ({}));
 // ─── Mocks ──────────────────────────────────────────────────────────────────
 
 const mockQueryItems = jest.fn<(...args: unknown[]) => Promise<unknown>>();
+const mockQueryAllItems = jest.fn<(...args: unknown[]) => Promise<unknown>>();
 const mockGetAssetUrl = jest.fn<(key: string) => string>();
 
 jest.mock("@/lib/dynamodb", () => ({
   queryItems: (...args: unknown[]) => mockQueryItems(...args),
+  queryAllItems: (...args: unknown[]) => mockQueryAllItems(...args),
   Keys: {
     project: {
       gsi1pk: () => "PROJECTS",
@@ -104,10 +106,10 @@ describe("Property 3: Admin-Defined Display Ordering", () => {
           projectItemArb(order, idx),
         );
 
-        // First call returns projects in GSI-sorted order
-        mockQueryItems.mockResolvedValueOnce({ items: projectItems });
+        // queryAllItems returns projects in GSI-sorted order (array directly)
+        mockQueryAllItems.mockResolvedValueOnce(projectItems);
 
-        // For each project, return empty images
+        // For each project, return empty images via queryItems
         for (let i = 0; i < projectItems.length; i++) {
           mockQueryItems.mockResolvedValueOnce({ items: [] });
         }

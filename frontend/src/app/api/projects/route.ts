@@ -5,7 +5,7 @@
  * Each project includes its associated images with public URLs.
  */
 
-import { queryItems, Keys } from "@/lib/dynamodb";
+import { queryAllItems, queryItems, Keys } from "@/lib/dynamodb";
 import type { DynamoDBItem } from "@/lib/dynamodb";
 import { getAssetUrl } from "@/lib/s3";
 import type { Project, ProjectImage } from "@/types/entities";
@@ -32,8 +32,8 @@ interface ProjectImageDynamoItem extends DynamoDBItem {
 
 export async function GET(): Promise<Response> {
   try {
-    // Query GSI1 for all projects ordered by displayOrder, filter to published only
-    const { items: projectItems } = await queryItems<ProjectDynamoItem>({
+    // Query GSI1 for all published projects, paginating through all DynamoDB pages
+    const projectItems = await queryAllItems<ProjectDynamoItem>({
       indexName: "GSI1",
       keyConditionExpression: "GSI1PK = :gsi1pk",
       expressionAttributeValues: {

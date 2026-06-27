@@ -51,7 +51,7 @@ export async function GET(
       SK: Keys.project.sk(),
     });
 
-    if (!projectItem) {
+    if (!projectItem || !projectItem.published) {
       const response: ApiResponse = {
         success: false,
         error: "Project not found",

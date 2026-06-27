@@ -203,6 +203,33 @@ describe("GET /api/projects/[id]", () => {
     expect(body.data.deploymentUrl).toBeUndefined();
   });
 
+  it("returns 404 when project exists but is unpublished", async () => {
+    mockGetItem.mockResolvedValueOnce({
+      PK: "PROJECT#p1",
+      SK: "META",
+      id: "p1",
+      title: "Draft Project",
+      description: "This is not published yet",
+      githubUrl: "https://github.com/user/draft",
+      published: false,
+      displayOrder: 5,
+      createdAt: "2024-01-01T00:00:00Z",
+      updatedAt: "2024-01-01T00:00:00Z",
+    });
+
+    const { GET } = await import("./route");
+    const response = await GET(createMockRequest(), {
+      params: Promise.resolve({ id: "p1" }),
+    });
+    const body = await response.json();
+
+    expect(response.status).toBe(404);
+    expect(body.success).toBe(false);
+    expect(body.error).toBe("Project not found");
+    // Should not query images for unpublished projects
+    expect(mockQueryItems).not.toHaveBeenCalled();
+  });
+
   it("returns 500 when DynamoDB throws an error", async () => {
     mockGetItem.mockRejectedValueOnce(new Error("Connection timeout"));
 

@@ -18,34 +18,6 @@
 import { describe, expect, it, jest, beforeEach } from "@jest/globals";
 import * as fc from "fast-check";
 
-// Mock server-only (no-op in tests)
-jest.mock("server-only", () => ({}));
-
-// ─── Mocks ──────────────────────────────────────────────────────────────────
-
-const mockQueryItems = jest.fn<(...args: unknown[]) => Promise<unknown>>();
-const mockGetAssetUrl = jest.fn<(key: string) => string>();
-
-jest.mock("@/lib/dynamodb", () => ({
-  queryItems: (...args: unknown[]) => mockQueryItems(...args),
-  Keys: {
-    project: {
-      gsi1pk: () => "PROJECTS",
-      gsi1sk: (order: number) => `ORDER#${String(order).padStart(5, "0")}`,
-      pk: (id: string) => `PROJECT#${id}`,
-      sk: () => "META",
-    },
-    projectImage: {
-      pk: (projectId: string) => `PROJECT#${projectId}`,
-      sk: (order: number) => `IMAGE#${String(order).padStart(5, "0")}`,
-    },
-  },
-}));
-
-jest.mock("@/lib/s3", () => ({
-  getAssetUrl: (key: string) => mockGetAssetUrl(key),
-}));
-
 // ─── Arbitraries ────────────────────────────────────────────────────────────
 
 /**
@@ -62,8 +34,8 @@ function projectItemArb(published: boolean) {
     deploymentUrl: fc.option(fc.webUrl(), { nil: undefined }),
     published: fc.constant(published),
     displayOrder: fc.integer({ min: 0, max: 1000 }),
-    createdAt: fc.date().map((d) => d.toISOString()),
-    updatedAt: fc.date().map((d) => d.toISOString()),
+    createdAt: fc.constant("2024-01-01T00:00:00.000Z"),
+    updatedAt: fc.constant("2024-01-02T00:00:00.000Z"),
   });
 }
 
@@ -87,10 +59,7 @@ const mixedProjectsArb = fc
 
 describe("Property 4: Published Project Filtering", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    mockGetAssetUrl.mockImplementation(
-      (key: string) => `https://cdn.example.com/${key}`,
-    );
+    jest.resetModules();
   });
 
   it("returns only published projects and excludes all unpublished projects", async () => {
@@ -98,17 +67,16 @@ describe("Property 4: Published Project Filtering", () => {
       fc.asyncProperty(mixedProjectsArb, async ({ allProjects, publishedProjects, unpublishedProjects }) => {
         jest.resetModules();
 
-        // The route handler uses a DynamoDB filter expression for published = true.
-        // We simulate the DynamoDB behavior: queryItems returns only published items
+        // The route handler uses queryAllItems which auto-paginates.
+        // We simulate DynamoDB behavior: queryAllItems returns only published items
         // because the filterExpression is applied server-side.
+        const mockQueryAllItemsLocal = jest.fn<(...args: unknown[]) => Promise<unknown>>();
         const mockQueryItemsLocal = jest.fn<(...args: unknown[]) => Promise<unknown>>();
 
-        // First call returns only published projects (simulating DynamoDB filter)
-        mockQueryItemsLocal.mockResolvedValueOnce({
-          items: publishedProjects,
-        });
+        // queryAllItems returns only published projects (simulating DynamoDB filter)
+        mockQueryAllItemsLocal.mockResolvedValueOnce(publishedProjects);
 
-        // Subsequent calls for images return empty arrays
+        // Subsequent queryItems calls for images return empty arrays
         for (let i = 0; i < publishedProjects.length; i++) {
           mockQueryItemsLocal.mockResolvedValueOnce({ items: [] });
         }
@@ -118,6 +86,7 @@ describe("Property 4: Published Project Filtering", () => {
         jest.doMock("server-only", () => ({}));
         jest.doMock("@/lib/dynamodb", () => ({
           queryItems: (...args: unknown[]) => mockQueryItemsLocal(...args),
+          queryAllItems: (...args: unknown[]) => mockQueryAllItemsLocal(...args),
           Keys: {
             project: {
               gsi1pk: () => "PROJECTS",

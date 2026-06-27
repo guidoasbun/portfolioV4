@@ -45,25 +45,26 @@ export async function GET(): Promise<Response> {
         scanIndexForward: true,
       });
 
-    // For each category, query its skills
-    const categoriesWithSkills: SkillCategoryWithSkills[] = [];
+    // Query skills for all categories concurrently to avoid N+1 sequential latency
+    const categorySkillResults = await Promise.all(
+      categoryItems.map(async (category) => {
+        const { items: skillItems } = await queryItems<SkillDynamoItem>({
+          indexName: "GSI1",
+          keyConditionExpression: "GSI1PK = :gsi1pk",
+          expressionAttributeValues: {
+            ":gsi1pk": Keys.skill.gsi1pk(category.id),
+          },
+          scanIndexForward: true,
+        });
+        return { category, skillItems };
+      }),
+    );
 
-    for (const category of categoryItems) {
-      const { items: skillItems } = await queryItems<SkillDynamoItem>({
-        indexName: "GSI1",
-        keyConditionExpression: "GSI1PK = :gsi1pk",
-        expressionAttributeValues: {
-          ":gsi1pk": Keys.skill.gsi1pk(category.id),
-        },
-        scanIndexForward: true,
-      });
-
-      // Filter out empty categories
-      if (skillItems.length === 0) {
-        continue;
-      }
-
-      categoriesWithSkills.push({
+    // Filter out empty categories, preserve displayOrder sort
+    const categoriesWithSkills: SkillCategoryWithSkills[] = categorySkillResults
+      .filter(({ skillItems }) => skillItems.length > 0)
+      .sort((a, b) => a.category.displayOrder - b.category.displayOrder)
+      .map(({ category, skillItems }) => ({
         id: category.id,
         label: category.label,
         displayOrder: category.displayOrder,
@@ -71,8 +72,7 @@ export async function GET(): Promise<Response> {
           id: skill.id,
           name: skill.name,
         })),
-      });
-    }
+      }));
 
     const response: ApiResponse<SkillCategoryWithSkills[]> = {
       success: true,

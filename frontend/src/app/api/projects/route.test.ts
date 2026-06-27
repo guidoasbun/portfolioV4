@@ -10,10 +10,12 @@ jest.mock("server-only", () => ({}));
 // ─── Mocks ──────────────────────────────────────────────────────────────────
 
 const mockQueryItems = jest.fn<(...args: unknown[]) => Promise<unknown>>();
+const mockQueryAllItems = jest.fn<(...args: unknown[]) => Promise<unknown>>();
 const mockGetAssetUrl = jest.fn<(key: string) => string>();
 
 jest.mock("@/lib/dynamodb", () => ({
   queryItems: (...args: unknown[]) => mockQueryItems(...args),
+  queryAllItems: (...args: unknown[]) => mockQueryAllItems(...args),
   Keys: {
     project: {
       gsi1pk: () => "PROJECTS",
@@ -43,9 +45,8 @@ describe("GET /api/projects", () => {
   });
 
   it("returns published projects ordered by displayOrder with images", async () => {
-    // First call: query projects from GSI
-    mockQueryItems.mockResolvedValueOnce({
-      items: [
+    // queryAllItems: returns the projects array directly
+    mockQueryAllItems.mockResolvedValueOnce([
         {
           PK: "PROJECT#p1",
           SK: "META",
@@ -71,10 +72,9 @@ describe("GET /api/projects", () => {
           createdAt: "2024-01-03T00:00:00Z",
           updatedAt: "2024-01-04T00:00:00Z",
         },
-      ],
-    });
+    ]);
 
-    // Second call: images for project p1
+    // queryItems: images for project p1
     mockQueryItems.mockResolvedValueOnce({
       items: [
         {
@@ -88,7 +88,7 @@ describe("GET /api/projects", () => {
       ],
     });
 
-    // Third call: images for project p2
+    // queryItems: images for project p2
     mockQueryItems.mockResolvedValueOnce({
       items: [],
     });
@@ -130,7 +130,7 @@ describe("GET /api/projects", () => {
   });
 
   it("returns empty array when no published projects exist", async () => {
-    mockQueryItems.mockResolvedValueOnce({ items: [] });
+    mockQueryAllItems.mockResolvedValueOnce([]);
 
     const { GET } = await import("./route");
     const response = await GET();
@@ -142,12 +142,12 @@ describe("GET /api/projects", () => {
   });
 
   it("queries GSI1 with correct parameters", async () => {
-    mockQueryItems.mockResolvedValueOnce({ items: [] });
+    mockQueryAllItems.mockResolvedValueOnce([]);
 
     const { GET } = await import("./route");
     await GET();
 
-    expect(mockQueryItems).toHaveBeenCalledWith({
+    expect(mockQueryAllItems).toHaveBeenCalledWith({
       indexName: "GSI1",
       keyConditionExpression: "GSI1PK = :gsi1pk",
       expressionAttributeValues: {
@@ -160,7 +160,7 @@ describe("GET /api/projects", () => {
   });
 
   it("returns 500 when DynamoDB query fails", async () => {
-    mockQueryItems.mockRejectedValueOnce(new Error("DynamoDB error"));
+    mockQueryAllItems.mockRejectedValueOnce(new Error("DynamoDB error"));
 
     const { GET } = await import("./route");
     const response = await GET();
