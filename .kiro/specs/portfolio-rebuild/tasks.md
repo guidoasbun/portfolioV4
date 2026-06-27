@@ -112,7 +112,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Generate random configurations with missing/empty/unparseable secrets
     - Verify startup fails with error identifying the specific invalid secret
 
-  - [ ] 4.5 Implement Cognito auth helpers
+  - [x] 4.5 Implement Cognito auth helpers
     - Create `frontend/src/lib/auth.ts` with token verification using Cognito JWKS
     - Implement middleware helper for extracting and validating JWT from cookies/headers
     - Implement login, logout, and token refresh flows
