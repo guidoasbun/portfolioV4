@@ -54,3 +54,14 @@ module "auth" {
   project_name = var.project_name
   environment  = var.environment
 }
+
+################################################################################
+# Secrets Module
+################################################################################
+
+module "secrets" {
+  source = "./modules/secrets"
+
+  project_name = var.project_name
+  environment  = var.environment
+}

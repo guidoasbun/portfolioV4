@@ -60,7 +60,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Set token expiration to 1 hour
     - _Requirements: 12.4, 9.4_
 
-  - [ ] 2.5 Implement secrets module
+  - [x] 2.5 Implement secrets module
     - Create `infrastructure/modules/secrets/` with Secrets Manager resources
     - Define secrets for database connection details, Cognito client secrets, API keys
     - _Requirements: 12.5, 14.1_
