@@ -265,19 +265,19 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
 - [x] 7. Checkpoint - API layer validation
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 8. Public frontend - Layout and shared components
-  - [ ] 8.1 Implement root layout with theme provider
+- [x] 8. Public frontend - Layout and shared components
+  - [x] 8.1 Implement root layout with theme provider
     - Create `frontend/src/app/layout.tsx` with HTML structure, font loading, and ThemeProvider
     - Implement ThemeProvider context with localStorage persistence and OS preference detection
     - Apply `data-theme` attribute to document root
     - _Requirements: 17.1, 17.3, 17.4, 17.5, 17.6_
 
-  - [ ]* 8.2 Write property test for theme preference resolution
+  - [x] 8.2 Write property test for theme preference resolution
     - **Property 16: Theme Preference Resolution**
     - **Validates: Requirements 17.3, 17.4, 17.5**
     - Generate random localStorage/OS preference combos; verify correct priority resolution
 
-  - [ ] 8.3 Implement Header component with navigation and theme toggle
+  - [x] 8.3 Implement Header component with navigation and theme toggle
     - Create fixed header with nav links (About, Projects, Experience, Skills, Contact)
     - Implement smooth scroll to sections on click (300-800ms)
     - Implement active section indicator based on scroll position
@@ -285,18 +285,18 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Support keyboard Tab navigation with visible focus indicators
     - _Requirements: 1.1, 1.3, 1.4, 1.5, 17.1_
 
-  - [ ] 8.4 Implement mobile navigation (hamburger menu)
+  - [x] 8.4 Implement mobile navigation (hamburger menu)
     - Create MobileMenu component with open/close animation (200-400ms)
     - Show hamburger menu below 768px viewport width
     - Ensure minimum 44x44px touch targets for all interactive elements
     - _Requirements: 15.3, 15.8_
 
-  - [ ] 8.5 Implement Footer component
+  - [x] 8.5 Implement Footer component
     - Create footer with social media links and copyright (owner name + current year)
     - Open social links in new tab
     - _Requirements: 1.2_
 
-  - [ ] 8.6 Implement shared UI components
+  - [x] 8.6 Implement shared UI components
     - Create Button, Card, Input, ImageGallery components
     - Implement hover states with transitions (150-300ms)
     - Implement focus indicators with ≥3:1 contrast ratio
@@ -304,7 +304,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Create Placeholder component for empty states
     - _Requirements: 15.7, 15.5_
 
-  - [ ] 8.7 Implement SEO components and configuration
+  - [x] 8.7 Implement SEO components and configuration
     - Create SEOHead component generating unique meta title (≤60 chars) and description (≤160 chars) per page
     - Create sitemap.xml at /sitemap.xml listing all public URLs
     - Create robots.txt at /robots.txt permitting crawling of public pages
