@@ -19,14 +19,27 @@ describe("Footer", () => {
     expect(screen.getByLabelText("Email")).toBeInTheDocument();
   });
 
-  it("opens social links in a new tab with security attributes", () => {
+  it("opens external social links in a new tab with security attributes", () => {
     render(<Footer />);
 
     const links = screen.getAllByRole("link");
-    for (const link of links) {
+    const externalLinks = links.filter((link) =>
+      link.getAttribute("href")?.startsWith("http"),
+    );
+
+    expect(externalLinks.length).toBeGreaterThan(0);
+    for (const link of externalLinks) {
       expect(link).toHaveAttribute("target", "_blank");
       expect(link).toHaveAttribute("rel", "noopener noreferrer");
     }
+  });
+
+  it("mailto link does not open in a new tab", () => {
+    render(<Footer />);
+
+    const emailLink = screen.getByLabelText("Email");
+    expect(emailLink).toHaveAttribute("href", "mailto:rodrigo@example.com");
+    expect(emailLink).not.toHaveAttribute("target");
   });
 
   it("renders a footer landmark with social navigation", () => {

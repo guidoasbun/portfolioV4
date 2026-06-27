@@ -77,6 +77,12 @@ export default function Contact() {
       setGeneralError(null);
       setSuccessMessage(null);
 
+      // Clear any existing auto-dismiss timeout from a previous submission
+      if (successTimeoutRef.current) {
+        clearTimeout(successTimeoutRef.current);
+        successTimeoutRef.current = null;
+      }
+
       // Client-side validation
       const validation = validateContactForm(formData);
       if (!validation.success) {

@@ -5,7 +5,7 @@
  * Validates: Requirements 2.1, 2.2, 2.3, 2.5, 2.6
  */
 
-import { getItem, queryItems, Keys } from "@/lib/dynamodb";
+import { getItem, queryAllItems, Keys } from "@/lib/dynamodb";
 import type { DynamoDBItem } from "@/lib/dynamodb";
 import { Placeholder } from "@/components/shared";
 import { ScrollAnimation } from "@/components/shared";
@@ -34,7 +34,7 @@ async function getAboutContent(): Promise<AboutItem | null> {
 }
 
 async function getPreferredResume(): Promise<ResumeItem | null> {
-  const { items } = await queryItems<ResumeItem>({
+  const items = await queryAllItems<ResumeItem>({
     indexName: "GSI1",
     keyConditionExpression: "GSI1PK = :pk",
     expressionAttributeValues: {

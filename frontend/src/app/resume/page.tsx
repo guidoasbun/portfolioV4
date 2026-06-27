@@ -6,7 +6,7 @@
  */
 
 import type { Metadata } from "next";
-import { getItem, queryItems, Keys } from "@/lib/dynamodb";
+import { getItem, queryAllItems, Keys } from "@/lib/dynamodb";
 import type { DynamoDBItem } from "@/lib/dynamodb";
 import type { WebResumeSection } from "@/types/entities";
 import { Placeholder } from "@/components/shared";
@@ -46,7 +46,7 @@ async function getWebResume(): Promise<WebResumeItem | null> {
 }
 
 async function hasPreferredResume(): Promise<boolean> {
-  const { items } = await queryItems<ResumeItem>({
+  const items = await queryAllItems<ResumeItem>({
     indexName: "GSI1",
     keyConditionExpression: "GSI1PK = :pk",
     expressionAttributeValues: {

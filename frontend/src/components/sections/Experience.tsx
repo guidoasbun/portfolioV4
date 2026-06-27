@@ -5,7 +5,7 @@
  * Validates: Requirements 6.1, 6.2, 6.4, 6.5
  */
 
-import { queryItems, Keys } from "@/lib/dynamodb";
+import { queryAllItems, Keys } from "@/lib/dynamodb";
 import type { DynamoDBItem } from "@/lib/dynamodb";
 import type { Experience } from "@/types/entities";
 import { Placeholder, ScrollAnimation } from "@/components/shared";
@@ -31,7 +31,7 @@ export default async function ExperienceSection() {
   let experiences: Experience[] = [];
 
   try {
-    const { items } = await queryItems({
+    const items = await queryAllItems({
       indexName: "GSI1",
       keyConditionExpression: "GSI1PK = :pk",
       expressionAttributeValues: {
@@ -83,12 +83,11 @@ export default async function ExperienceSection() {
                   >
                     {/* Timeline dot */}
                     <div
-                      className="absolute left-[13px] top-1 h-3 w-3 rounded-full bg-primary md:left-auto md:top-1 md:right-[-6px] md:even:left-[-6px]"
-                      style={
+                      className={`absolute top-1 h-3 w-3 rounded-full bg-primary left-[13px] ${
                         index % 2 === 0
-                          ? { left: "auto", right: "-6px" }
-                          : { left: "-6px", right: "auto" }
-                      }
+                          ? "md:left-auto md:right-[-6px]"
+                          : "md:left-[-6px] md:right-auto"
+                      }`}
                       aria-hidden="true"
                     />
 

@@ -7,7 +7,7 @@
  * If no skills exist at all, a placeholder message is shown.
  */
 
-import { queryItems, Keys } from "@/lib/dynamodb";
+import { queryAllItems, Keys } from "@/lib/dynamodb";
 import type { DynamoDBItem } from "@/lib/dynamodb";
 import { Placeholder } from "@/components/shared";
 import { ScrollAnimation } from "@/components/shared";
@@ -33,7 +33,7 @@ interface SkillCategoryWithSkills {
 
 async function fetchSkillsGroupedByCategory(): Promise<SkillCategoryWithSkills[]> {
   // 1. Query all skill categories ordered by displayOrder (ascending)
-  const { items: categoryItems } = await queryItems<SkillCategoryDynamoItem>({
+  const categoryItems = await queryAllItems<SkillCategoryDynamoItem>({
     indexName: "GSI1",
     keyConditionExpression: "GSI1PK = :gsi1pk",
     expressionAttributeValues: {
@@ -42,10 +42,10 @@ async function fetchSkillsGroupedByCategory(): Promise<SkillCategoryWithSkills[]
     scanIndexForward: true,
   });
 
-  // 2. For each category, query its skills concurrently
+  // 2. For each category, query all its skills concurrently
   const categorySkillResults = await Promise.all(
     categoryItems.map(async (category) => {
-      const { items: skillItems } = await queryItems<SkillDynamoItem>({
+      const skillItems = await queryAllItems<SkillDynamoItem>({
         indexName: "GSI1",
         keyConditionExpression: "GSI1PK = :gsi1pk",
         expressionAttributeValues: {
