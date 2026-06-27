@@ -20,3 +20,15 @@ provider "aws" {
     }
   }
 }
+
+################################################################################
+# Networking Module
+################################################################################
+
+module "networking" {
+  source = "./modules/networking"
+
+  project_name    = var.project_name
+  environment     = var.environment
+  certificate_arn = var.certificate_arn
+}

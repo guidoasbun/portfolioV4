@@ -42,7 +42,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Define AWS provider configuration
     - _Requirements: 12.7_
 
-  - [ ] 2.2 Implement networking module
+  - [x] 2.2 Implement networking module
     - Create `infrastructure/modules/networking/` with VPC, public/private subnets, security groups
     - Define Application Load Balancer with HTTPS listener (port 443) and target group
     - Configure security group rules for ALB and ECS tasks
