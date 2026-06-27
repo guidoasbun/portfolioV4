@@ -48,7 +48,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Configure security group rules for ALB and ECS tasks
     - _Requirements: 12.1_
 
-  - [ ] 2.3 Implement storage module
+  - [x] 2.3 Implement storage module
     - Create `infrastructure/modules/storage/` with DynamoDB single table (PK, SK, GSI1PK, GSI1SK)
     - Define GSI for alternate access patterns
     - Create S3 bucket with public read access for assets and CORS configuration

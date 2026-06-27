@@ -32,3 +32,14 @@ module "networking" {
   environment     = var.environment
   certificate_arn = var.certificate_arn
 }
+
+################################################################################
+# Storage Module
+################################################################################
+
+module "storage" {
+  source = "./modules/storage"
+
+  project_name = var.project_name
+  environment  = var.environment
+}
