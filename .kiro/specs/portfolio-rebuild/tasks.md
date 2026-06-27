@@ -86,7 +86,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
 - [x] 3. Checkpoint - Infrastructure validation
   - Ensure all Terraform modules validate successfully, ask the user if questions arise.
 
-- [ ] 4. Data access layer and utilities
+- [x] 4. Data access layer and utilities
   - [x] 4.1 Implement DynamoDB client and single-table helpers
     - Create `frontend/src/lib/dynamodb.ts` with DynamoDB Document Client initialization
     - Implement helper functions for key generation (PK/SK patterns for each entity)
@@ -118,7 +118,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Implement login, logout, and token refresh flows
     - _Requirements: 9.1, 9.2, 9.5, 9.6_
 
-  - [ ] 4.6 Implement validation utilities
+  - [x] 4.6 Implement validation utilities
     - Create `frontend/src/lib/validation.ts` with Zod-based validators for all entities
     - Implement resume file validation (PDF only, ≤10MB)
     - Implement image upload validation (JPEG/PNG/WebP, ≤5MB, max 10 per project)
