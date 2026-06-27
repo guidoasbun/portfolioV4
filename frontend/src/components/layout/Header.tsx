@@ -80,7 +80,7 @@ export default function Header() {
       className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-md"
       role="banner"
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-md">
+      <div className="mx-auto flex h-16 max-w-[80rem] items-center justify-between px-md">
         {/* Site brand / name */}
         <a
           href="#"

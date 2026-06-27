@@ -310,8 +310,8 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Create robots.txt at /robots.txt permitting crawling of public pages
     - _Requirements: 16.1, 16.2, 16.5_
 
-- [ ] 9. Public frontend - Content sections
-  - [ ] 9.1 Implement About section
+- [x] 9. Public frontend - Content sections
+  - [x] 9.1 Implement About section
     - Fetch about content via server component
     - Display personal description and professional pitch blocks
     - Show download resume button (hidden if no preferred resume set)
@@ -319,7 +319,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Show placeholder if no content configured
     - _Requirements: 2.1, 2.2, 2.3, 2.5, 2.6_
 
-  - [ ] 9.2 Implement Projects section
+  - [x] 9.2 Implement Projects section
     - Fetch published projects via server component
     - Display grid layout (single column below 768px)
     - Show project titles and thumbnail images with Next.js Image (lazy loading, optimized formats)
@@ -327,40 +327,40 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Open links in new tab; hide deployment link if not present
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 15.4, 16.3_
 
-  - [ ] 9.3 Implement Experience section
+  - [x] 9.3 Implement Experience section
     - Fetch experience entries via server component
     - Display timeline in reverse chronological order
     - Show job title, company, date range (start-end or start-Present), description
     - Show placeholder if no entries exist
     - _Requirements: 6.1, 6.2, 6.4, 6.5_
 
-  - [ ]* 9.4 Write property test for experience entry rendering
+  - [x] 9.4 Write property test for experience entry rendering
     - **Property 6: Experience Entry Rendering**
     - **Validates: Requirements 6.2, 6.5**
     - Generate random experience entries; verify all fields present, null end date → "Present"
 
-  - [ ] 9.5 Implement Skills section
+  - [x] 9.5 Implement Skills section
     - Fetch skills via server component
     - Display skills grouped by category in admin-defined order
     - Hide empty categories
     - Show placeholder if no skills exist
     - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
 
-  - [ ] 9.6 Implement Contact section
+  - [x] 9.6 Implement Contact section
     - Create contact form with name (max 100), email (max 254), body (max 2000) fields
     - Implement client-side and server-side validation with field-specific errors
     - Display success confirmation (disappears after 5s or on dismiss)
     - Preserve form data on submission failure
     - _Requirements: 8.1, 8.2, 8.3, 8.5_
 
-  - [ ] 9.7 Implement Web Resume page (/resume)
+  - [x] 9.7 Implement Web Resume page (/resume)
     - Create `frontend/src/app/resume/page.tsx` with structured sections (summary, experience, education, skills, certifications)
     - Display sections in admin-defined order
     - Add download PDF button (hidden if no preferred resume)
     - Show placeholder if no content configured
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
 
-  - [ ] 9.8 Implement home page composition
+  - [x] 9.8 Implement home page composition
     - Create `frontend/src/app/page.tsx` composing About, Projects, Experience, Skills, Contact sections
     - Wire server-side rendering for all data fetching
     - Ensure proper section IDs for scroll navigation
