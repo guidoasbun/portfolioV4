@@ -206,39 +206,39 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - **Validates: Requirements 8.4**
     - Generate random valid messages; verify stored record matches original with valid ISO 8601 timestamp
 
-- [ ] 6. API routes - Admin endpoints
-  - [ ] 6.1 Implement admin middleware for route protection
+- [x] 6. API routes - Admin endpoints
+  - [x] 6.1 Implement admin middleware for route protection
     - Create Next.js middleware matching `/admin/*` and `/api/*` admin routes
     - Verify Cognito JWT token from cookies/headers
     - Redirect to login page if token is missing or invalid
     - _Requirements: 9.5, 14.5_
 
-  - [ ]* 6.2 Write property test for admin route protection
+  - [x] 6.2 Write property test for admin route protection
     - **Property 10: Admin Route Protection**
     - **Validates: Requirements 9.5, 14.5**
     - Generate random admin paths without valid auth; verify redirect to login
 
-  - [ ] 6.3 Implement project CRUD admin endpoints
+  - [x] 6.3 Implement project CRUD admin endpoints
     - POST /api/projects - Create project with images upload via presigned URLs
     - PUT /api/projects/[id] - Update project metadata
     - DELETE /api/projects/[id] - Delete project + associated S3 images
     - PUT /api/projects/[id]/reorder-images - Update image display order
     - _Requirements: 10.1, 10.2, 10.3, 10.7_
 
-  - [ ] 6.4 Implement experience CRUD admin endpoints
+  - [x] 6.4 Implement experience CRUD admin endpoints
     - POST /api/experience - Create experience entry
     - PUT /api/experience/[id] - Update experience entry
     - DELETE /api/experience/[id] - Delete experience entry
     - _Requirements: 10.8_
 
-  - [ ] 6.5 Implement skills CRUD admin endpoints
+  - [x] 6.5 Implement skills CRUD admin endpoints
     - POST /api/skills - Create skill with category assignment
     - PUT /api/skills/[id] - Update skill
     - DELETE /api/skills/[id] - Delete skill
     - Support category management (create, edit, delete, reorder)
     - _Requirements: 10.9_
 
-  - [ ] 6.6 Implement about and resume admin endpoints
+  - [x] 6.6 Implement about and resume admin endpoints
     - PUT /api/about - Update about content
     - GET /api/resumes - List all resumes
     - POST /api/resumes/upload - Generate presigned upload URL for PDF
@@ -246,18 +246,18 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - DELETE /api/resumes/[id] - Delete resume + S3 file
     - _Requirements: 10.10, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6_
 
-  - [ ]* 6.7 Write property test for preferred resume invariant
+  - [x] 6.7 Write property test for preferred resume invariant
     - **Property 2: Preferred Resume Invariant**
     - **Validates: Requirements 3.3**
     - Generate random resume sets + selection; verify exactly one preferred after operation
 
-  - [ ] 6.8 Implement message management admin endpoints
+  - [x] 6.8 Implement message management admin endpoints
     - GET /api/messages - List messages paginated (20/page), sorted by timestamp desc
     - GET /api/messages/[id] - Get full message, mark as read
     - DELETE /api/messages/[id] - Delete message with confirmation
     - _Requirements: 11.1, 11.2, 11.3, 11.4, 11.5_
 
-  - [ ]* 6.9 Write property test for message listing order and pagination
+  - [x] 6.9 Write property test for message listing order and pagination
     - **Property 13: Message Listing Order and Pagination**
     - **Validates: Requirements 11.1, 11.2**
     - Generate random messages with timestamps; verify descending sort, max 20/page, body truncated to 100 chars
