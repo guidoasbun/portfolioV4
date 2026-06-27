@@ -37,7 +37,7 @@ const invalidTitleArb: fc.Arbitrary<string> = fc.constant("");
  * Generate a valid description (non-empty string, max 5000 characters).
  */
 const validDescriptionArb: fc.Arbitrary<string> = fc
-  .string({ minLength: 1, maxLength: 500 })
+  .string({ minLength: 1, maxLength: 5000 })
   .filter((s) => s.trim().length > 0);
 
 /**

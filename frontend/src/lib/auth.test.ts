@@ -625,7 +625,7 @@ describe("refreshSession", () => {
       },
     });
 
-    const result = await refreshSession("valid-refresh-token");
+    const result = await refreshSession("valid-refresh-token", "test-user-sub");
 
     expect(result.idToken).toBe("new-id-token");
     expect(result.accessToken).toBe("new-access-token");
@@ -635,7 +635,7 @@ describe("refreshSession", () => {
   it("throws when refresh fails", async () => {
     mockCognitoSend.mockResolvedValue({});
 
-    await expect(refreshSession("invalid-refresh-token")).rejects.toThrow(
+    await expect(refreshSession("invalid-refresh-token", "test-user-sub")).rejects.toThrow(
       "Token refresh failed: no result returned",
     );
   });

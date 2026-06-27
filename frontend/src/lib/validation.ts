@@ -116,14 +116,16 @@ export function validateImageUpload(
 // ─── Contact Form Validation ────────────────────────────────────────────────
 
 export const contactFormSchema = z.object({
-  name: z.string().min(1, "Name is required").max(100, "Name must not exceed 100 characters"),
+  name: z.string().trim().min(1, "Name is required").max(100, "Name must not exceed 100 characters"),
   email: z
     .string()
+    .trim()
     .min(1, "Email is required")
     .email("Email must be a valid email address")
     .max(254, "Email must not exceed 254 characters"),
   message: z
     .string()
+    .trim()
     .min(1, "Message is required")
     .max(2000, "Message must not exceed 2000 characters"),
 });
@@ -162,9 +164,10 @@ export function validateContactForm(input: ContactFormInput): ValidationResult {
 // ─── Project Form Validation ────────────────────────────────────────────────
 
 export const projectFormSchema = z.object({
-  title: z.string().min(1, "Title is required").max(200, "Title must not exceed 200 characters"),
+  title: z.string().trim().min(1, "Title is required").max(200, "Title must not exceed 200 characters"),
   description: z
     .string()
+    .trim()
     .min(1, "Description is required")
     .max(5000, "Description must not exceed 5000 characters"),
   githubUrl: z.string().url("GitHub URL must be a valid URL").optional().or(z.literal("")),

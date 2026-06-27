@@ -90,6 +90,7 @@ const SECRET_DEFINITIONS = {
 // ─── Cached Secrets ─────────────────────────────────────────────────────────
 
 let cachedSecrets: AppSecrets | null = null;
+let inflightPromise: Promise<AppSecrets> | null = null;
 
 // ─── Core Functions ─────────────────────────────────────────────────────────
 
@@ -176,82 +177,95 @@ export async function loadSecrets(): Promise<AppSecrets> {
     return cachedSecrets;
   }
 
-  const secrets: Partial<AppSecrets> = {};
+  // Dedupe concurrent callers by caching the in-flight promise
+  if (inflightPromise) {
+    return inflightPromise;
+  }
 
-  // Load DynamoDB config
-  const dynamodbName =
-    process.env[SECRET_DEFINITIONS.dynamodb.envKey] ??
-    SECRET_DEFINITIONS.dynamodb.defaultName;
-  const dynamodbRaw = await fetchSecret(dynamodbName, SECRET_DEFINITIONS.dynamodb.label);
-  const dynamodbParsed = parseSecret<DynamoDBSecretConfig>(
-    dynamodbRaw,
-    SECRET_DEFINITIONS.dynamodb.label,
-    dynamodbName,
-  );
-  validateSecretFields(
-    dynamodbParsed as unknown as Record<string, unknown>,
-    SECRET_DEFINITIONS.dynamodb.requiredFields,
-    SECRET_DEFINITIONS.dynamodb.label,
-    dynamodbName,
-  );
-  secrets.dynamodb = dynamodbParsed;
+  inflightPromise = (async () => {
+    try {
+      const secrets: Partial<AppSecrets> = {};
 
-  // Load Cognito config
-  const cognitoName =
-    process.env[SECRET_DEFINITIONS.cognito.envKey] ??
-    SECRET_DEFINITIONS.cognito.defaultName;
-  const cognitoRaw = await fetchSecret(cognitoName, SECRET_DEFINITIONS.cognito.label);
-  const cognitoParsed = parseSecret<CognitoSecretConfig>(
-    cognitoRaw,
-    SECRET_DEFINITIONS.cognito.label,
-    cognitoName,
-  );
-  validateSecretFields(
-    cognitoParsed as unknown as Record<string, unknown>,
-    SECRET_DEFINITIONS.cognito.requiredFields,
-    SECRET_DEFINITIONS.cognito.label,
-    cognitoName,
-  );
-  secrets.cognito = cognitoParsed;
+      // Load DynamoDB config
+      const dynamodbName =
+        process.env[SECRET_DEFINITIONS.dynamodb.envKey] ??
+        SECRET_DEFINITIONS.dynamodb.defaultName;
+      const dynamodbRaw = await fetchSecret(dynamodbName, SECRET_DEFINITIONS.dynamodb.label);
+      const dynamodbParsed = parseSecret<DynamoDBSecretConfig>(
+        dynamodbRaw,
+        SECRET_DEFINITIONS.dynamodb.label,
+        dynamodbName,
+      );
+      validateSecretFields(
+        dynamodbParsed as unknown as Record<string, unknown>,
+        SECRET_DEFINITIONS.dynamodb.requiredFields,
+        SECRET_DEFINITIONS.dynamodb.label,
+        dynamodbName,
+      );
+      secrets.dynamodb = dynamodbParsed;
 
-  // Load S3 config
-  const s3Name =
-    process.env[SECRET_DEFINITIONS.s3.envKey] ??
-    SECRET_DEFINITIONS.s3.defaultName;
-  const s3Raw = await fetchSecret(s3Name, SECRET_DEFINITIONS.s3.label);
-  const s3Parsed = parseSecret<S3SecretConfig>(
-    s3Raw,
-    SECRET_DEFINITIONS.s3.label,
-    s3Name,
-  );
-  validateSecretFields(
-    s3Parsed as unknown as Record<string, unknown>,
-    SECRET_DEFINITIONS.s3.requiredFields,
-    SECRET_DEFINITIONS.s3.label,
-    s3Name,
-  );
-  secrets.s3 = s3Parsed;
+      // Load Cognito config
+      const cognitoName =
+        process.env[SECRET_DEFINITIONS.cognito.envKey] ??
+        SECRET_DEFINITIONS.cognito.defaultName;
+      const cognitoRaw = await fetchSecret(cognitoName, SECRET_DEFINITIONS.cognito.label);
+      const cognitoParsed = parseSecret<CognitoSecretConfig>(
+        cognitoRaw,
+        SECRET_DEFINITIONS.cognito.label,
+        cognitoName,
+      );
+      validateSecretFields(
+        cognitoParsed as unknown as Record<string, unknown>,
+        SECRET_DEFINITIONS.cognito.requiredFields,
+        SECRET_DEFINITIONS.cognito.label,
+        cognitoName,
+      );
+      secrets.cognito = cognitoParsed;
 
-  // Load API keys
-  const apiKeysName =
-    process.env[SECRET_DEFINITIONS.apiKeys.envKey] ??
-    SECRET_DEFINITIONS.apiKeys.defaultName;
-  const apiKeysRaw = await fetchSecret(apiKeysName, SECRET_DEFINITIONS.apiKeys.label);
-  const apiKeysParsed = parseSecret<ApiKeysSecretConfig>(
-    apiKeysRaw,
-    SECRET_DEFINITIONS.apiKeys.label,
-    apiKeysName,
-  );
-  validateSecretFields(
-    apiKeysParsed as unknown as Record<string, unknown>,
-    SECRET_DEFINITIONS.apiKeys.requiredFields,
-    SECRET_DEFINITIONS.apiKeys.label,
-    apiKeysName,
-  );
-  secrets.apiKeys = apiKeysParsed;
+      // Load S3 config
+      const s3Name =
+        process.env[SECRET_DEFINITIONS.s3.envKey] ??
+        SECRET_DEFINITIONS.s3.defaultName;
+      const s3Raw = await fetchSecret(s3Name, SECRET_DEFINITIONS.s3.label);
+      const s3Parsed = parseSecret<S3SecretConfig>(
+        s3Raw,
+        SECRET_DEFINITIONS.s3.label,
+        s3Name,
+      );
+      validateSecretFields(
+        s3Parsed as unknown as Record<string, unknown>,
+        SECRET_DEFINITIONS.s3.requiredFields,
+        SECRET_DEFINITIONS.s3.label,
+        s3Name,
+      );
+      secrets.s3 = s3Parsed;
 
-  cachedSecrets = secrets as AppSecrets;
-  return cachedSecrets;
+      // Load API keys
+      const apiKeysName =
+        process.env[SECRET_DEFINITIONS.apiKeys.envKey] ??
+        SECRET_DEFINITIONS.apiKeys.defaultName;
+      const apiKeysRaw = await fetchSecret(apiKeysName, SECRET_DEFINITIONS.apiKeys.label);
+      const apiKeysParsed = parseSecret<ApiKeysSecretConfig>(
+        apiKeysRaw,
+        SECRET_DEFINITIONS.apiKeys.label,
+        apiKeysName,
+      );
+      validateSecretFields(
+        apiKeysParsed as unknown as Record<string, unknown>,
+        SECRET_DEFINITIONS.apiKeys.requiredFields,
+        SECRET_DEFINITIONS.apiKeys.label,
+        apiKeysName,
+      );
+      secrets.apiKeys = apiKeysParsed;
+
+      cachedSecrets = secrets as AppSecrets;
+      return cachedSecrets;
+    } finally {
+      inflightPromise = null;
+    }
+  })();
+
+  return inflightPromise;
 }
 
 /**
@@ -295,4 +309,5 @@ export function getSecrets(): AppSecrets {
  */
 export function clearSecretsCache(): void {
   cachedSecrets = null;
+  inflightPromise = null;
 }

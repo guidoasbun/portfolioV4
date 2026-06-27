@@ -12,7 +12,6 @@ import "server-only";
 import {
   CognitoIdentityProviderClient,
   InitiateAuthCommand,
-  RevokeTokenCommand,
   GlobalSignOutCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import { createRemoteJWKSet, jwtVerify } from "jose";
@@ -316,10 +315,11 @@ export async function clearAuthCookies(): Promise<void> {
  * without requiring the user to re-enter credentials.
  *
  * @param refreshToken - The refresh token from the initial login
+ * @param username - The Cognito username (sub or cognito:username) for SECRET_HASH computation
  * @returns Refresh result with new tokens on success
  * @throws {Error} If the refresh token is invalid or expired
  */
-export async function refreshSession(refreshToken: string): Promise<RefreshResult> {
+export async function refreshSession(refreshToken: string, username: string): Promise<RefreshResult> {
   const secrets = await loadSecrets();
   const { clientId, clientSecret } = secrets.cognito;
 
@@ -328,10 +328,10 @@ export async function refreshSession(refreshToken: string): Promise<RefreshResul
   };
 
   if (clientSecret) {
-    // For REFRESH_TOKEN_AUTH, SECRET_HASH uses the sub from the token
-    // but we can pass the clientId-based hash as a workaround
+    // SECRET_HASH for REFRESH_TOKEN_AUTH must use the actual username (sub),
+    // not the clientId. Formula: Base64(HMAC_SHA256(clientSecret, username + clientId))
     authParameters.SECRET_HASH = await computeSecretHash(
-      clientId,
+      username,
       clientId,
       clientSecret,
     );
