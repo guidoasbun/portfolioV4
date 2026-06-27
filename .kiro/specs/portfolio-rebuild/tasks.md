@@ -262,7 +262,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - **Validates: Requirements 11.1, 11.2**
     - Generate random messages with timestamps; verify descending sort, max 20/page, body truncated to 100 chars
 
-- [ ] 7. Checkpoint - API layer validation
+- [x] 7. Checkpoint - API layer validation
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 8. Public frontend - Layout and shared components
