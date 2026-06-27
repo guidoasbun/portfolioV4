@@ -15,7 +15,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - _Requirements: 12.1, 14.1_
 
   - [x] 1.2 Define core TypeScript interfaces and data models
-    - Create `src/types/` directory with interfaces for Project, Experience, Skill, SkillCategory, About, Resume, Message, WebResume as defined in design
+    - Create `frontend/src/types/` directory with interfaces for Project, Experience, Skill, SkillCategory, About, Resume, Message, WebResume as defined in design
     - Create validation schemas using Zod for each entity
     - Define API request/response types
     - _Requirements: 5.1, 6.1, 7.1, 8.1, 3.1, 10.1_
@@ -34,74 +34,74 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Add test scripts to `package.json`
     - _Requirements: 16.4_
 
-- [ ] 2. Terraform infrastructure modules
-  - [ ] 2.1 Create Terraform project structure and backend configuration
-    - Create `terraform/` directory structure with `main.tf`, `variables.tf`, `outputs.tf`, `backend.tf`
+- [x] 2. Terraform infrastructure modules
+  - [x] 2.1 Create Terraform project structure and backend configuration
+    - Create `infrastructure/` directory structure with `main.tf`, `variables.tf`, `outputs.tf`, `backend.tf`
     - Create `environments/prod/terraform.tfvars` and `backend.tfvars`
     - Configure S3 remote state backend with DynamoDB state locking
     - Define AWS provider configuration
     - _Requirements: 12.7_
 
-  - [ ] 2.2 Implement networking module
-    - Create `terraform/modules/networking/` with VPC, public/private subnets, security groups
+  - [x] 2.2 Implement networking module
+    - Create `infrastructure/modules/networking/` with VPC, public/private subnets, security groups
     - Define Application Load Balancer with HTTPS listener (port 443) and target group
     - Configure security group rules for ALB and ECS tasks
     - _Requirements: 12.1_
 
-  - [ ] 2.3 Implement storage module
-    - Create `terraform/modules/storage/` with DynamoDB single table (PK, SK, GSI1PK, GSI1SK)
+  - [x] 2.3 Implement storage module
+    - Create `infrastructure/modules/storage/` with DynamoDB single table (PK, SK, GSI1PK, GSI1SK)
     - Define GSI for alternate access patterns
     - Create S3 bucket with public read access for assets and CORS configuration
     - _Requirements: 12.2, 12.3_
 
-  - [ ] 2.4 Implement auth module
-    - Create `terraform/modules/auth/` with Cognito User Pool and client
+  - [x] 2.4 Implement auth module
+    - Create `infrastructure/modules/auth/` with Cognito User Pool and client
     - Configure password policy, account lockout (5 attempts, 15min lock)
     - Set token expiration to 1 hour
     - _Requirements: 12.4, 9.4_
 
-  - [ ] 2.5 Implement secrets module
-    - Create `terraform/modules/secrets/` with Secrets Manager resources
+  - [x] 2.5 Implement secrets module
+    - Create `infrastructure/modules/secrets/` with Secrets Manager resources
     - Define secrets for database connection details, Cognito client secrets, API keys
     - _Requirements: 12.5, 14.1_
 
-  - [ ] 2.6 Implement compute module
-    - Create `terraform/modules/compute/` with ECS Fargate cluster, task definition, and service
+  - [x] 2.6 Implement compute module
+    - Create `infrastructure/modules/compute/` with ECS Fargate cluster (ARM64/Graviton), task definition, and service
     - Define ECR repository for container images
     - Configure task role with IAM policies for DynamoDB, S3, Secrets Manager read access, and Cognito
     - _Requirements: 12.1, 12.8, 14.3_
 
-  - [ ] 2.7 Implement CI/CD module
-    - Create `terraform/modules/cicd/` with OIDC provider resource for GitHub Actions
+  - [x] 2.7 Implement CI/CD module
+    - Create `infrastructure/modules/cicd/` with OIDC provider resource for GitHub Actions
     - Define IAM role and policy for GitHub Actions to assume via OIDC
     - Grant permissions for ECR push, ECS deploy, and Secrets Manager read
     - _Requirements: 12.6, 13.3, 14.2_
 
-  - [ ] 2.8 Validate Terraform configuration
-    - Run `terraform validate` to ensure no errors
+  - [x] 2.8 Validate Terraform configuration
+    - Run `terraform validate` in `infrastructure/` to ensure no errors
     - Run `terraform plan` to verify expected resource set
     - Fix any validation errors
     - _Requirements: 12.9_
 
-- [ ] 3. Checkpoint - Infrastructure validation
+- [x] 3. Checkpoint - Infrastructure validation
   - Ensure all Terraform modules validate successfully, ask the user if questions arise.
 
 - [ ] 4. Data access layer and utilities
-  - [ ] 4.1 Implement DynamoDB client and single-table helpers
-    - Create `src/lib/dynamodb.ts` with DynamoDB Document Client initialization
+  - [x] 4.1 Implement DynamoDB client and single-table helpers
+    - Create `frontend/src/lib/dynamodb.ts` with DynamoDB Document Client initialization
     - Implement helper functions for key generation (PK/SK patterns for each entity)
     - Implement generic get, put, query, delete, and update operations
     - _Requirements: 8.4, 10.1, 10.2_
 
-  - [ ] 4.2 Implement S3 client and presigned URL generation
-    - Create `src/lib/s3.ts` with S3 client initialization
+  - [x] 4.2 Implement S3 client and presigned URL generation
+    - Create `frontend/src/lib/s3.ts` with S3 client initialization
     - Implement presigned URL generation for uploads (1hr expiry)
     - Implement asset URL generation for public access
     - Implement file deletion helper
     - _Requirements: 3.1, 10.5_
 
   - [ ] 4.3 Implement secrets manager client and startup validation
-    - Create `src/lib/secrets.ts` with Secrets Manager client
+    - Create `frontend/src/lib/secrets.ts` with Secrets Manager client
     - Implement startup validation that checks all required secrets are present and parseable
     - Fail application startup with specific error messages if any secret is missing or invalid
     - _Requirements: 14.1, 14.6, 14.8_
@@ -113,13 +113,13 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Verify startup fails with error identifying the specific invalid secret
 
   - [ ] 4.5 Implement Cognito auth helpers
-    - Create `src/lib/auth.ts` with token verification using Cognito JWKS
+    - Create `frontend/src/lib/auth.ts` with token verification using Cognito JWKS
     - Implement middleware helper for extracting and validating JWT from cookies/headers
     - Implement login, logout, and token refresh flows
     - _Requirements: 9.1, 9.2, 9.5, 9.6_
 
   - [ ] 4.6 Implement validation utilities
-    - Create `src/lib/validation.ts` with Zod-based validators for all entities
+    - Create `frontend/src/lib/validation.ts` with Zod-based validators for all entities
     - Implement resume file validation (PDF only, ≤10MB)
     - Implement image upload validation (JPEG/PNG/WebP, ≤5MB, max 10 per project)
     - Implement contact form validation (name required, valid email, body required)
@@ -267,7 +267,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
 
 - [ ] 8. Public frontend - Layout and shared components
   - [ ] 8.1 Implement root layout with theme provider
-    - Create `app/layout.tsx` with HTML structure, font loading, and ThemeProvider
+    - Create `frontend/src/app/layout.tsx` with HTML structure, font loading, and ThemeProvider
     - Implement ThemeProvider context with localStorage persistence and OS preference detection
     - Apply `data-theme` attribute to document root
     - _Requirements: 17.1, 17.3, 17.4, 17.5, 17.6_
@@ -354,14 +354,14 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - _Requirements: 8.1, 8.2, 8.3, 8.5_
 
   - [ ] 9.7 Implement Web Resume page (/resume)
-    - Create `app/resume/page.tsx` with structured sections (summary, experience, education, skills, certifications)
+    - Create `frontend/src/app/resume/page.tsx` with structured sections (summary, experience, education, skills, certifications)
     - Display sections in admin-defined order
     - Add download PDF button (hidden if no preferred resume)
     - Show placeholder if no content configured
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
 
   - [ ] 9.8 Implement home page composition
-    - Create `app/page.tsx` composing About, Projects, Experience, Skills, Contact sections
+    - Create `frontend/src/app/page.tsx` composing About, Projects, Experience, Skills, Contact sections
     - Wire server-side rendering for all data fetching
     - Ensure proper section IDs for scroll navigation
     - _Requirements: 1.1, 16.1_
@@ -371,14 +371,14 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
 
 - [ ] 11. Admin panel
   - [ ] 11.1 Implement admin layout with auth guard and sidebar navigation
-    - Create `app/admin/layout.tsx` with sidebar nav (Projects, Experience, Skills, About, Resumes, Messages)
+    - Create `frontend/src/app/admin/layout.tsx` with sidebar nav (Projects, Experience, Skills, About, Resumes, Messages)
     - Implement auth guard redirecting to login if no valid session
     - Create admin login page with email/password form
     - Display error messages for invalid credentials (without revealing which field is wrong)
     - _Requirements: 9.1, 9.2, 9.3, 9.5_
 
   - [ ] 11.2 Implement admin dashboard
-    - Create `app/admin/page.tsx` with overview (message count, project count, etc.)
+    - Create `frontend/src/app/admin/page.tsx` with overview (message count, project count, etc.)
     - Add quick links to content management sections
     - Include logout button that invalidates session and redirects to public site
     - _Requirements: 9.6_
@@ -419,15 +419,15 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
 
 - [ ] 12. CI/CD Pipeline
   - [ ] 12.1 Create Dockerfile for Next.js application
-    - Create multi-stage Dockerfile (build + production)
+    - Create multi-stage Dockerfile (build + production) targeting `linux/arm64`
     - Optimize for small image size (Alpine base)
     - Configure for standalone Next.js output
     - _Requirements: 13.1_
 
   - [ ] 12.2 Create GitHub Actions workflow for build and deploy
     - Create `.github/workflows/deploy.yml` triggered on push to main
-    - Run linting and type-checking as first steps (halt if failed)
-    - Build Next.js application and Docker image
+    - Run linting and type-checking as first steps (halt if failed) from `frontend/` directory
+    - Build Next.js application and Docker image for `linux/arm64` (using QEMU or native ARM runner) from `frontend/`
     - Tag image with Git commit SHA
     - Authenticate to AWS via OIDC (no static keys)
     - Push image to ECR

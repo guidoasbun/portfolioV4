@@ -172,7 +172,7 @@ A full rebuild of a personal portfolio website designed to attract potential emp
 
 #### Acceptance Criteria
 
-1. THE IaC_Module SHALL define the ECS Fargate cluster, task definition, and service for running the Portfolio_App container, including an Application Load Balancer with HTTPS listener and target group
+1. THE IaC_Module SHALL define the ECS Fargate cluster (ARM64/Graviton), task definition, and service for running the Portfolio_App container, including an Application Load Balancer with HTTPS listener and target group
 2. THE IaC_Module SHALL define the S3 bucket for the Asset_Store with public read access for served assets and CORS configuration allowing requests from the Portfolio_App domain
 3. THE IaC_Module SHALL define DynamoDB tables for Projects, Experience, Skills, About, Resumes, and Messages entities
 4. THE IaC_Module SHALL define the Cognito User Pool and client for the Auth_Service
@@ -188,7 +188,7 @@ A full rebuild of a personal portfolio website designed to attract potential emp
 
 #### Acceptance Criteria
 
-1. WHEN code is pushed to the main branch, THE CI_CD_Pipeline SHALL build the Next.js application, build the Docker container image, tag the image with the Git commit SHA, and push the image to Amazon ECR
+1. WHEN code is pushed to the main branch, THE CI_CD_Pipeline SHALL build the Next.js application, build the Docker container image for ARM64 architecture, tag the image with the Git commit SHA, and push the image to Amazon ECR
 2. WHEN the container image is pushed to ECR, THE CI_CD_Pipeline SHALL deploy the updated task definition to the Compute_Service and wait for the service to reach a steady state with healthy running tasks within 10 minutes before marking the deployment as successful
 3. THE CI_CD_Pipeline SHALL authenticate to AWS using the OIDC_Provider without static access keys
 4. IF a build or deployment step fails, THEN THE CI_CD_Pipeline SHALL mark the GitHub Actions workflow run as failed and halt further deployment steps
