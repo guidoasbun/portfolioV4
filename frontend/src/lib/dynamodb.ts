@@ -6,6 +6,8 @@
  * and generic CRUD operations are exposed from this module.
  */
 
+import "server-only";
+
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
   DynamoDBDocumentClient,

@@ -40,8 +40,9 @@ module "networking" {
 module "storage" {
   source = "./modules/storage"
 
-  project_name = var.project_name
-  environment  = var.environment
+  project_name    = var.project_name
+  environment     = var.environment
+  allowed_origins = ["https://${var.domain_name}"]
 }
 
 ################################################################################

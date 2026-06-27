@@ -9,7 +9,11 @@ variable "environment" {
 }
 
 variable "allowed_origins" {
-  description = "List of allowed origins for S3 CORS configuration"
+  description = "List of allowed origins for S3 CORS configuration (e.g. [\"https://example.com\"])"
   type        = list(string)
-  default     = ["*"]
+
+  validation {
+    condition     = length(var.allowed_origins) > 0 && !contains(var.allowed_origins, "*")
+    error_message = "allowed_origins must contain at least one explicit origin and must not use wildcard \"*\"."
+  }
 }

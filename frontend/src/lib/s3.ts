@@ -8,6 +8,7 @@
  *   - resumes/<resume-id>.pdf
  */
 
+import "server-only";
 import {
   S3Client,
   PutObjectCommand,

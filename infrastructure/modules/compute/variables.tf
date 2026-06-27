@@ -76,3 +76,9 @@ variable "cognito_user_pool_arn" {
   description = "ARN of the Cognito User Pool for task role policy"
   type        = string
 }
+
+variable "image_tag" {
+  description = "Container image tag. Defaults to 'initial' for first deploy; CI/CD overrides with Git commit SHA."
+  type        = string
+  default     = "initial"
+}

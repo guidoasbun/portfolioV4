@@ -4,8 +4,8 @@
 
 resource "aws_ecr_repository" "app" {
   name                 = "${var.project_name}-${var.environment}-app"
-  image_tag_mutability = "MUTABLE"
-  force_delete         = true
+  image_tag_mutability = "IMMUTABLE"
+  force_delete         = false
 
   image_scanning_configuration {
     scan_on_push = true
@@ -175,7 +175,7 @@ resource "aws_ecs_task_definition" "app" {
   container_definitions = jsonencode([
     {
       name      = "${var.project_name}-app"
-      image     = "${aws_ecr_repository.app.repository_url}:latest"
+      image     = "${aws_ecr_repository.app.repository_url}:${var.image_tag}"
       essential = true
 
       portMappings = [
@@ -195,6 +195,12 @@ resource "aws_ecs_task_definition" "app" {
       }
     }
   ])
+
+  # CI/CD registers new task definition revisions with SHA-tagged images,
+  # so Terraform should not revert the image on subsequent applies.
+  lifecycle {
+    ignore_changes = [container_definitions]
+  }
 
   tags = {
     Name = "${var.project_name}-${var.environment}-app"

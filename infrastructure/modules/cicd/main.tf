@@ -33,9 +33,9 @@ data "aws_iam_policy_document" "github_actions_assume_role" {
     }
 
     condition {
-      test     = "StringLike"
+      test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:${var.github_org}/${var.github_repo}:*"]
+      values   = ["repo:${var.github_org}/${var.github_repo}:ref:refs/heads/main"]
     }
   }
 }
@@ -79,17 +79,39 @@ data "aws_iam_policy_document" "github_actions_policy" {
     resources = [var.ecr_repository_arn]
   }
 
-  # ECS deploy permissions
+  # ECS deploy permissions - scoped to specific cluster/service
   statement {
-    sid    = "ECSDeploy"
+    sid    = "ECSServiceDeploy"
     effect = "Allow"
     actions = [
       "ecs:UpdateService",
       "ecs:DescribeServices",
-      "ecs:DescribeTaskDefinition",
-      "ecs:RegisterTaskDefinition",
+    ]
+    resources = [var.ecs_service_arn]
+  }
+
+  statement {
+    sid    = "ECSTaskOperations"
+    effect = "Allow"
+    actions = [
       "ecs:ListTasks",
       "ecs:DescribeTasks",
+    ]
+    resources = ["*"]
+    condition {
+      test     = "ArnEquals"
+      variable = "ecs:cluster"
+      values   = [var.ecs_cluster_arn]
+    }
+  }
+
+  # RegisterTaskDefinition and DescribeTaskDefinition cannot be scoped to a specific resource
+  statement {
+    sid    = "ECSTaskDefinition"
+    effect = "Allow"
+    actions = [
+      "ecs:RegisterTaskDefinition",
+      "ecs:DescribeTaskDefinition",
     ]
     resources = ["*"]
   }
