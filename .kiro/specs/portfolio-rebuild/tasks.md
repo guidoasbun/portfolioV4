@@ -137,17 +137,17 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - **Validates: Requirements 10.5, 10.6**
     - Generate random file types, sizes, and image counts; verify correct accept/reject
 
-  - [ ]* 4.9 Write property test for contact form validation
+  - [x] 4.9 Write property test for contact form validation
     - **Property 8: Contact Form Validation**
     - **Validates: Requirements 8.3**
     - Generate random invalid inputs; verify field-specific error identifiers returned
 
-  - [ ]* 4.10 Write property test for project form validation
+  - [x] 4.10 Write property test for project form validation
     - **Property 11: Project Form Validation**
     - **Validates: Requirements 10.4**
     - Generate random forms missing title or description; verify rejection with correct errors
 
-  - [ ]* 4.11 Write property test for meta tag constraints
+  - [x] 4.11 Write property test for meta tag constraints
     - **Property 15: Meta Tag Character Constraints**
     - **Validates: Requirements 16.2**
     - Generate random metadata; verify title ≤60 chars, description ≤160 chars
