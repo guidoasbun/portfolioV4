@@ -100,7 +100,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Implement file deletion helper
     - _Requirements: 3.1, 10.5_
 
-  - [ ] 4.3 Implement secrets manager client and startup validation
+  - [x] 4.3 Implement secrets manager client and startup validation
     - Create `frontend/src/lib/secrets.ts` with Secrets Manager client
     - Implement startup validation that checks all required secrets are present and parseable
     - Fail application startup with specific error messages if any secret is missing or invalid
