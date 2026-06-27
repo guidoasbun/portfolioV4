@@ -1,7 +1,9 @@
-import { queryItems, Keys } from "@/lib/dynamodb";
+import { queryItems, putItem, Keys } from "@/lib/dynamodb";
 import type { DynamoDBItem } from "@/lib/dynamodb";
 import type { Experience } from "@/types/entities";
 import type { ApiResponse } from "@/types/api";
+import { createExperienceRequestSchema } from "@/types/schemas";
+import { validateRequest } from "@/lib/auth";
 
 /**
  * Maps a DynamoDB item to an Experience entity.
@@ -53,5 +55,82 @@ export async function GET(): Promise<Response> {
     };
 
     return Response.json(response, { status: 503 });
+  }
+}
+
+/**
+ * POST /api/experience
+ *
+ * Creates a new experience entry. Requires authentication.
+ */
+export async function POST(request: Request): Promise<Response> {
+  try {
+    // Verify authentication
+    const authResult = await validateRequest(request);
+    if (!authResult.valid) {
+      const response: ApiResponse = { success: false, error: "Unauthorized" };
+      return Response.json(response, { status: 401 });
+    }
+
+    // Parse and validate request body
+    const body = await request.json();
+    const parseResult = createExperienceRequestSchema.safeParse(body);
+
+    if (!parseResult.success) {
+      const response: ApiResponse = {
+        success: false,
+        error: "Invalid request body",
+        errors: parseResult.error.flatten().fieldErrors as Record<string, string>,
+      };
+      return Response.json(response, { status: 400 });
+    }
+
+    const { jobTitle, company, startDate, endDate, description } = parseResult.data;
+    const id = crypto.randomUUID();
+    const now = new Date().toISOString();
+
+    // Save to DynamoDB
+    await putItem({
+      PK: Keys.experience.pk(id),
+      SK: Keys.experience.sk(),
+      GSI1PK: Keys.experience.gsi1pk(),
+      GSI1SK: Keys.experience.gsi1sk(startDate),
+      type: "experience",
+      id,
+      jobTitle,
+      company,
+      startDate,
+      endDate,
+      description,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    const experience: Experience = {
+      id,
+      jobTitle,
+      company,
+      startDate,
+      endDate,
+      description,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    const response: ApiResponse<Experience> = {
+      success: true,
+      data: experience,
+    };
+
+    return Response.json(response, { status: 201 });
+  } catch (error) {
+    console.error("Failed to create experience entry:", error);
+
+    const response: ApiResponse = {
+      success: false,
+      error: "Failed to create experience entry",
+    };
+
+    return Response.json(response, { status: 500 });
   }
 }

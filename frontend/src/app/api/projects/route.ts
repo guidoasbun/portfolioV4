@@ -1,13 +1,15 @@
 /**
- * GET /api/projects
+ * GET /api/projects - Returns all published projects ordered by displayOrder.
+ * POST /api/projects - Create a new project (admin, protected by proxy).
  *
- * Returns all published projects ordered by displayOrder.
  * Each project includes its associated images with public URLs.
  */
 
-import { queryAllItems, queryItems, Keys } from "@/lib/dynamodb";
+import { randomUUID } from "crypto";
+import { queryAllItems, queryItems, putItem, Keys } from "@/lib/dynamodb";
 import type { DynamoDBItem } from "@/lib/dynamodb";
 import { getAssetUrl } from "@/lib/s3";
+import { createProjectRequestSchema } from "@/types/schemas";
 import type { Project, ProjectImage } from "@/types/entities";
 import type { ApiResponse } from "@/types/api";
 
@@ -92,6 +94,72 @@ export async function GET(): Promise<Response> {
     const response: ApiResponse = {
       success: false,
       error: "Failed to fetch projects",
+    };
+    return Response.json(response, { status: 500 });
+  }
+}
+
+export async function POST(request: Request): Promise<Response> {
+  try {
+    const body = await request.json();
+
+    // Validate request body
+    const parseResult = createProjectRequestSchema.safeParse(body);
+    if (!parseResult.success) {
+      const response: ApiResponse = {
+        success: false,
+        error: "Validation failed",
+        errors: parseResult.error.flatten().fieldErrors as Record<string, string>,
+      };
+      return Response.json(response, { status: 400 });
+    }
+
+    const data = parseResult.data;
+    const projectId = randomUUID();
+    const now = new Date().toISOString();
+
+    // Save project metadata to DynamoDB
+    await putItem({
+      PK: Keys.project.pk(projectId),
+      SK: Keys.project.sk(),
+      GSI1PK: Keys.project.gsi1pk(),
+      GSI1SK: Keys.project.gsi1sk(data.displayOrder),
+      type: "PROJECT",
+      id: projectId,
+      title: data.title,
+      description: data.description,
+      githubUrl: data.githubUrl,
+      deploymentUrl: data.deploymentUrl,
+      published: data.published,
+      displayOrder: data.displayOrder,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    const project: Omit<Project, "images"> = {
+      id: projectId,
+      title: data.title,
+      description: data.description,
+      githubUrl: data.githubUrl,
+      deploymentUrl: data.deploymentUrl,
+      published: data.published,
+      displayOrder: data.displayOrder,
+      images: [],
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    const response: ApiResponse<Omit<Project, "images"> & { images: ProjectImage[] }> = {
+      success: true,
+      data: { ...project, images: [] },
+    };
+
+    return Response.json(response, { status: 201 });
+  } catch (error) {
+    console.error("Error creating project:", error);
+    const response: ApiResponse = {
+      success: false,
+      error: "Failed to create project",
     };
     return Response.json(response, { status: 500 });
   }
