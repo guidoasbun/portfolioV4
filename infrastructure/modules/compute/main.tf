@@ -230,7 +230,19 @@ resource "aws_ecs_service" "app" {
     container_port   = var.container_port
   }
 
-  depends_on = [aws_iam_role_policy_attachment.task_execution_managed]
+  # Ensure the ALB listener has associated the target group before creating the service
+  depends_on = [
+    aws_iam_role_policy_attachment.task_execution_managed,
+  ]
+
+  # Force Terraform to wait for the listener by referencing alb_listener_arn
+  # (the implicit dependency through the variable ensures correct ordering)
+  lifecycle {
+    precondition {
+      condition     = var.alb_listener_arn != ""
+      error_message = "ALB listener must be created before the ECS service."
+    }
+  }
 
   tags = {
     Name = "${var.project_name}-${var.environment}-service"
