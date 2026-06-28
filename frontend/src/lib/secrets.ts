@@ -70,7 +70,7 @@ const SECRET_DEFINITIONS = {
   cognito: {
     envKey: "COGNITO_SECRET_NAME",
     defaultName: "portfolio-prod-cognito-config",
-    requiredFields: ["userPoolId", "clientId", "clientSecret"] as const,
+    requiredFields: ["userPoolId", "clientId"] as const,
     label: "Cognito configuration",
   },
   s3: {
