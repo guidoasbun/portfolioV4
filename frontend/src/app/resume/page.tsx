@@ -12,6 +12,9 @@ import type { WebResumeSection } from "@/types/entities";
 import { Placeholder } from "@/components/shared";
 import { ResumeDownloadButton } from "@/components/sections/ResumeDownloadButton";
 
+// Force dynamic rendering — page requires AWS credentials at runtime
+export const dynamic = "force-dynamic";
+
 // ─── SEO Metadata ───────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
