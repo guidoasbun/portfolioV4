@@ -117,19 +117,27 @@ export async function PUT(
       return Response.json(response, { status: 400 });
     }
 
-    // For each reorder entry: delete old item and put with new SK
-    await Promise.all(
-      reorderData.map(async ({ imageId, order }) => {
-        const existingImage = imageMap.get(imageId)!;
+    // Two-phase reorder to avoid SK collisions:
+    // Phase 1: Delete all affected image records
+    // Phase 2: Put all image records with new order values
+    // This prevents races where a parallel delete+put can overwrite another image.
 
-        // Delete the old item (with old SK based on old order)
-        await deleteItem({
+    // Phase 1: Delete all current records that are being reordered
+    await Promise.all(
+      reorderData.map(({ imageId }) => {
+        const existingImage = imageMap.get(imageId)!;
+        return deleteItem({
           PK: Keys.projectImage.pk(id),
           SK: Keys.projectImage.sk(existingImage.order),
         });
+      }),
+    );
 
-        // Put item with new order (new SK)
-        await putItem({
+    // Phase 2: Put all records with new order values
+    await Promise.all(
+      reorderData.map(({ imageId, order }) => {
+        const existingImage = imageMap.get(imageId)!;
+        return putItem({
           PK: Keys.projectImage.pk(id),
           SK: Keys.projectImage.sk(order),
           type: "PROJECT_IMAGE",

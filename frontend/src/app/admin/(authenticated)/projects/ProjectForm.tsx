@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import type { Project, ProjectImage } from "@/types/entities";
@@ -203,10 +203,27 @@ export function ProjectForm({ project, mode }: ProjectFormProps) {
 
   const handleRemoveImage = (index: number) => {
     setImages((prev) => {
+      const removed = prev[index];
+      // Revoke the object URL to free memory
+      if (removed?.previewUrl) {
+        URL.revokeObjectURL(removed.previewUrl);
+      }
       const updated = prev.filter((_, i) => i !== index);
       return updated.map((img, i) => ({ ...img, order: i }));
     });
   };
+
+  // Revoke all remaining preview URLs on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      for (const img of images) {
+        if (img.previewUrl) {
+          URL.revokeObjectURL(img.previewUrl);
+        }
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally only on unmount
+  }, []);
 
   // ─── Drop zone for files ──────────────────────────────────────────────────
 
@@ -323,20 +340,21 @@ export function ProjectForm({ project, mode }: ProjectFormProps) {
           return;
         }
 
-        // Handle new images and reorder
+        // Handle new images and reorder as a unified operation.
+        // First, save any newly uploaded images to DynamoDB.
         const newImages = images.filter((img) => img.isNew);
         if (newImages.length > 0) {
           await saveProjectImages(project!.id, newImages);
         }
 
-        // Send reorder request if there are existing images
-        const existingImages = images.filter((img) => !img.isNew);
-        if (existingImages.length > 0) {
+        // Then reorder ALL images (new + existing) together to ensure
+        // consistent order values without SK collisions.
+        if (images.length > 0) {
           await fetch(`/api/projects/${project!.id}/reorder-images`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              images: existingImages.map((img) => ({
+              images: images.map((img) => ({
                 imageId: img.id,
                 order: img.order,
               })),
@@ -566,14 +584,7 @@ async function saveProjectImages(
   projectId: string,
   imageItems: ImageItem[],
 ): Promise<void> {
-  // Save each image to DynamoDB by calling a dedicated endpoint
-  // Since we don't have a dedicated "add images" endpoint, we use the
-  // internal API by POSTing image metadata.
-  // For now, we call the reorder-images endpoint with the new images,
-  // but first we need to create the image records. We'll use a separate
-  // helper endpoint or directly call via internal POST.
-  // The simplest approach: call a project-specific images endpoint.
-  await fetch(`/api/projects/${projectId}/images`, {
+  const res = await fetch(`/api/projects/${projectId}/images`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -585,4 +596,18 @@ async function saveProjectImages(
       })),
     }),
   });
+
+  if (!res.ok) {
+    const data = await res.json().catch(() => null);
+    const message =
+      data?.error ?? data?.errors
+        ? Object.values(data.errors as Record<string, string>).join(", ")
+        : "Failed to save image metadata";
+    throw new Error(message as string);
+  }
+
+  const data = await res.json();
+  if (!data.success) {
+    throw new Error(data.error ?? "Failed to save image metadata");
+  }
 }

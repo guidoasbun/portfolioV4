@@ -7,12 +7,17 @@
 
 import type { NextRequest } from "next/server";
 import { z } from "zod";
-import { getItem, putItem, Keys } from "@/lib/dynamodb";
+import { getItem, putItem, queryItems, Keys } from "@/lib/dynamodb";
 import type { DynamoDBItem } from "@/lib/dynamodb";
 import type { ApiResponse } from "@/types/api";
 
 interface ProjectDynamoItem extends DynamoDBItem {
   id: string;
+}
+
+interface ProjectImageDynamoItem extends DynamoDBItem {
+  id: string;
+  order: number;
 }
 
 const addImagesRequestSchema = z.object({
@@ -76,6 +81,36 @@ export async function POST(
     }
 
     const { images } = parseResult.data;
+
+    // Reject duplicate order values within the request
+    const orderValues = images.map((img) => img.order);
+    if (new Set(orderValues).size !== orderValues.length) {
+      const response: ApiResponse = {
+        success: false,
+        error: "Duplicate order values are not allowed",
+      };
+      return Response.json(response, { status: 400 });
+    }
+
+    // Check for order collisions with existing images
+    const { items: existingImages } = await queryItems<ProjectImageDynamoItem>({
+      keyConditionExpression: "PK = :pk AND begins_with(SK, :skPrefix)",
+      expressionAttributeValues: {
+        ":pk": Keys.projectImage.pk(id),
+        ":skPrefix": "IMAGE#",
+      },
+      scanIndexForward: true,
+    });
+
+    const existingOrders = new Set(existingImages.map((img) => img.order));
+    const conflicting = orderValues.filter((o) => existingOrders.has(o));
+    if (conflicting.length > 0) {
+      const response: ApiResponse = {
+        success: false,
+        error: `Order values already occupied: ${conflicting.join(", ")}`,
+      };
+      return Response.json(response, { status: 409 });
+    }
 
     // Save each image record
     await Promise.all(

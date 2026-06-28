@@ -52,11 +52,17 @@ export async function POST(request: NextRequest): Promise<Response> {
       return Response.json(response, { status: 400 });
     }
 
-    const { projectId, filename, contentType } = parseResult.data;
+    const { projectId, contentType } = parseResult.data;
 
-    // Generate a unique image ID and determine the file extension
+    // Derive extension from the validated contentType (not filename) to prevent
+    // path injection via crafted filenames.
+    const extMap: Record<string, string> = {
+      "image/jpeg": "jpg",
+      "image/png": "png",
+      "image/webp": "webp",
+    };
     const imageId = randomUUID();
-    const ext = filename.split(".").pop() ?? "jpg";
+    const ext = extMap[contentType] ?? "jpg";
     const s3Key = projectImageKey(projectId, imageId, ext);
 
     const uploadUrl = await generateUploadUrl(s3Key, contentType);
