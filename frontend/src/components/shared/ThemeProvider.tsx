@@ -5,7 +5,6 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from "react";
 
@@ -14,6 +13,7 @@ export type Theme = "light" | "dark";
 interface ThemeContextValue {
   theme: Theme;
   toggleTheme: () => void;
+  mounted: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
@@ -65,26 +65,24 @@ function persistTheme(theme: Theme): void {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(() =>
-    typeof window !== "undefined"
-      ? resolveTheme(getStoredTheme(), getOSPreference())
-      : "light",
-  );
-  const mountedRef = useRef(false);
+  const [theme, setTheme] = useState<Theme>("light");
+  const [mounted, setMounted] = useState(false);
 
-  // Apply theme to DOM on mount
+  // Resolve actual theme on mount (client only) to avoid hydration mismatch.
+  // Server always renders "light"; client corrects after hydration.
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    mountedRef.current = true;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const resolved = resolveTheme(getStoredTheme(), getOSPreference());
+    setTheme(resolved); // eslint-disable-line react-hooks/set-state-in-effect
+    document.documentElement.setAttribute("data-theme", resolved);
+    setMounted(true);
   }, []);
 
   // Sync data-theme attribute whenever theme changes (after mount)
   useEffect(() => {
-    if (mountedRef.current) {
+    if (mounted) {
       document.documentElement.setAttribute("data-theme", theme);
     }
-  }, [theme]);
+  }, [theme, mounted]);
 
   const toggleTheme = useCallback(() => {
     setTheme((prev) => {
@@ -95,7 +93,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, mounted }}>
       {children}
     </ThemeContext.Provider>
   );
