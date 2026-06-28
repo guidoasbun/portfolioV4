@@ -10,7 +10,7 @@
 
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 
@@ -55,55 +55,55 @@ export default function SkillsManagementPage() {
 
   // ─── Data Fetching ──────────────────────────────────────────────────────
 
-  const fetchData = useCallback(async () => {
-    try {
-      setError(null);
-
-      // Fetch categories (includes empty ones for admin)
-      const catRes = await fetch("/api/skills/categories");
-      const catJson = await catRes.json();
-      if (!catJson.success) throw new Error(catJson.error || "Failed to fetch categories");
-
-      const categoriesList = catJson.data as Array<{
-        id: string;
-        label: string;
-        displayOrder: number;
-      }>;
-
-      // Fetch all skills (public endpoint filters empty categories but still returns skills)
-      // We'll use the public skills endpoint and merge with categories
-      const skillsRes = await fetch("/api/skills");
-      const skillsJson = await skillsRes.json();
-
-      // Build skills map by category
-      const skillsByCategory: Record<string, SkillData[]> = {};
-      if (skillsJson.success && skillsJson.data) {
-        for (const group of skillsJson.data) {
-          skillsByCategory[group.id] = group.skills;
-        }
-      }
-
-      // Merge categories with skills
-      const merged: CategoryData[] = categoriesList
-        .sort((a, b) => a.displayOrder - b.displayOrder)
-        .map((cat) => ({
-          id: cat.id,
-          label: cat.label,
-          displayOrder: cat.displayOrder,
-          skills: skillsByCategory[cat.id] ?? [],
-        }));
-
-      setCategories(merged);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An unexpected error occurred");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    let cancelled = false;
+    setError(null);
+
+    Promise.all([
+      fetch("/api/skills/categories").then((r) => r.json()),
+      fetch("/api/skills").then((r) => r.json()),
+    ])
+      .then(([catJson, skillsJson]) => {
+        if (cancelled) return;
+        if (!catJson.success) throw new Error(catJson.error || "Failed to fetch categories");
+
+        const categoriesList = catJson.data as Array<{
+          id: string;
+          label: string;
+          displayOrder: number;
+        }>;
+
+        const skillsByCategory: Record<string, SkillData[]> = {};
+        if (skillsJson.success && skillsJson.data) {
+          for (const group of skillsJson.data) {
+            skillsByCategory[group.id] = group.skills;
+          }
+        }
+
+        const merged: CategoryData[] = categoriesList
+          .sort((a, b) => a.displayOrder - b.displayOrder)
+          .map((cat) => ({
+            id: cat.id,
+            label: cat.label,
+            displayOrder: cat.displayOrder,
+            skills: skillsByCategory[cat.id] ?? [],
+          }));
+
+        setCategories(merged);
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err instanceof Error ? err.message : "An unexpected error occurred");
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => { cancelled = true; };
+  }, [refreshKey]);
+
+  const refetchData = () => setRefreshKey((k) => k + 1);
 
   // ─── Category CRUD ──────────────────────────────────────────────────────
 
@@ -158,7 +158,7 @@ export default function SkillsManagementPage() {
       setShowCategoryForm(false);
       setCategoryLabel("");
       setEditingCategory(null);
-      await fetchData();
+      refetchData();
     } catch (err) {
       setCategoryFormError(err instanceof Error ? err.message : "An error occurred");
     } finally {
@@ -177,7 +177,7 @@ export default function SkillsManagementPage() {
       if (!json.success) throw new Error(json.error || "Failed to delete category");
 
       setDeletingCategory(null);
-      await fetchData();
+      refetchData();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to delete category");
       setDeletingCategory(null);
@@ -209,7 +209,7 @@ export default function SkillsManagementPage() {
         }),
       ]);
 
-      await fetchData();
+      refetchData();
     } catch {
       setError("Failed to reorder categories");
     }
@@ -265,7 +265,7 @@ export default function SkillsManagementPage() {
       }
 
       setSkillName("");
-      await fetchData();
+      refetchData();
     } catch (err) {
       setSkillFormError(err instanceof Error ? err.message : "An error occurred");
     } finally {
@@ -284,7 +284,7 @@ export default function SkillsManagementPage() {
       if (!json.success) throw new Error(json.error || "Failed to delete skill");
 
       setDeletingSkill(null);
-      await fetchData();
+      refetchData();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to delete skill");
       setDeletingSkill(null);

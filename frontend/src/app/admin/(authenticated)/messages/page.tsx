@@ -10,7 +10,7 @@
 
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import type { Message } from "@/types/entities";
 import type { ApiResponse, PaginatedResponse } from "@/types/api";
@@ -49,30 +49,37 @@ export default function MessagesInboxPage() {
 
   // ─── Fetch messages ───────────────────────────────────────────────────
 
-  const fetchMessages = useCallback(async (pageNum: number) => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const res = await fetch(`/api/messages?page=${pageNum}&pageSize=20`);
-      const json: ApiResponse<PaginatedResponse<Message>> = await res.json();
-      if (json.success && json.data) {
-        setMessages(json.data.items);
-        setTotalPages(json.data.totalPages);
-        setTotal(json.data.total);
-        setPage(json.data.page);
-      } else {
-        setError("Failed to load messages.");
-      }
-    } catch {
-      setError("Failed to load messages.");
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
-    fetchMessages(page);
-  }, [fetchMessages, page]);
+    let cancelled = false;
+    setIsLoading(true);
+    setError(null);
+
+    fetch(`/api/messages?page=${page}&pageSize=20`)
+      .then((res) => res.json())
+      .then((json: ApiResponse<PaginatedResponse<Message>>) => {
+        if (cancelled) return;
+        if (json.success && json.data) {
+          setMessages(json.data.items);
+          setTotalPages(json.data.totalPages);
+          setTotal(json.data.total);
+          setPage(json.data.page);
+        } else {
+          setError("Failed to load messages.");
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setError("Failed to load messages.");
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+
+    return () => { cancelled = true; };
+  }, [page, refreshKey]);
+
+  const refetchMessages = () => setRefreshKey((k) => k + 1);
 
   // ─── Detail view ──────────────────────────────────────────────────────
 
@@ -125,7 +132,7 @@ export default function MessagesInboxPage() {
           setSelectedMessage(null);
         }
         setDeletingId(null);
-        await fetchMessages(page);
+        refetchMessages();
       } else {
         setError("Failed to delete message.");
       }
