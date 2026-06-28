@@ -27,7 +27,9 @@ export async function POST(request: Request) {
     await setAuthCookies(tokens);
 
     return Response.json({ success: true });
-  } catch {
+  } catch (error: unknown) {
+    // Log the actual error for debugging
+    console.error("[auth/login] Login failed:", error instanceof Error ? error.message : error);
     // Generic error — never reveal which field is incorrect (req 9.3)
     return Response.json(
       { success: false, error: "Invalid credentials" },

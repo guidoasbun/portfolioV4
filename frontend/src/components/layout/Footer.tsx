@@ -8,7 +8,7 @@
 const socialLinks = [
   {
     name: "GitHub",
-    href: "https://github.com/rodrigo",
+    href: "https://github.com/guidoasbun",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -23,7 +23,7 @@ const socialLinks = [
   },
   {
     name: "LinkedIn",
-    href: "https://linkedin.com/in/rodrigo",
+    href: "https://linkedin.com/in/guidoasbun",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -38,7 +38,7 @@ const socialLinks = [
   },
   {
     name: "Email",
-    href: "mailto:rodrigo@example.com",
+    href: "mailto:guido@asbun.io",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +78,7 @@ export default function Footer() {
         </nav>
 
         <p className="text-sm text-foreground-muted">
-          &copy; {currentYear} Rodrigo
+          &copy; {currentYear} Guido Asbun
         </p>
       </div>
     </footer>

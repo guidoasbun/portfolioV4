@@ -185,6 +185,13 @@ resource "aws_ecs_task_definition" "app" {
         }
       ]
 
+      environment = [
+        { name = "AWS_REGION", value = var.aws_region },
+        { name = "COGNITO_USER_POOL_ID", value = var.cognito_user_pool_id },
+        { name = "DYNAMODB_TABLE_NAME", value = var.dynamodb_table_name },
+        { name = "NODE_ENV", value = "production" },
+      ]
+
       logConfiguration = {
         logDriver = "awslogs"
         options = {
