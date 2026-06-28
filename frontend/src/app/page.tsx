@@ -6,6 +6,9 @@ import ExperienceSection from "@/components/sections/Experience";
 import { Skills } from "@/components/sections/Skills";
 import Contact from "@/components/sections/Contact";
 
+// Force dynamic rendering — page requires AWS credentials at runtime
+export const dynamic = "force-dynamic";
+
 /**
  * Home page — server component that composes all portfolio sections.
  * Each section handles its own data fetching internally.
