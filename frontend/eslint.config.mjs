@@ -13,6 +13,14 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    rules: {
+      // Allow setState in effects for data-fetching patterns (fetch on mount/refetch).
+      // The React Compiler rule flags synchronous setState at the top of effects
+      // (e.g., setIsLoading(true) before an async call), which is a standard pattern.
+      "react-hooks/set-state-in-effect": "warn",
+    },
+  },
 ]);
 
 export default eslintConfig;

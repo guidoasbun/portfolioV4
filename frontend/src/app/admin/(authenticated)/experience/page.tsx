@@ -9,7 +9,7 @@
 
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import type { Experience } from "@/types/entities";
@@ -68,26 +68,33 @@ export default function ExperienceManagementPage() {
 
   // ─── Fetch ──────────────────────────────────────────────────────────────
 
-  const fetchExperiences = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const res = await fetch("/api/experience");
-      const json: ApiResponse<Experience[]> = await res.json();
-      if (json.success && json.data) {
-        setExperiences(json.data);
-      } else {
-        setError("Failed to load experience entries.");
-      }
-    } catch {
-      setError("Failed to load experience entries.");
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
-    fetchExperiences();
-  }, [fetchExperiences]);
+    let cancelled = false;
+    setIsLoading(true);
+
+    fetch("/api/experience")
+      .then((res) => res.json())
+      .then((json: ApiResponse<Experience[]>) => {
+        if (cancelled) return;
+        if (json.success && json.data) {
+          setExperiences(json.data);
+        } else {
+          setError("Failed to load experience entries.");
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setError("Failed to load experience entries.");
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+
+    return () => { cancelled = true; };
+  }, [refreshKey]);
+
+  const refetchExperiences = () => setRefreshKey((k) => k + 1);
 
   // ─── Form handlers ─────────────────────────────────────────────────────
 
@@ -176,7 +183,7 @@ export default function ExperienceManagementPage() {
 
       if (json.success) {
         closeForm();
-        await fetchExperiences();
+        refetchExperiences();
       } else {
         if (!json.success && json.errors) {
           setFormErrors(json.errors);
@@ -211,7 +218,7 @@ export default function ExperienceManagementPage() {
       const json: ApiResponse = await res.json();
       if (json.success) {
         setDeletingId(null);
-        await fetchExperiences();
+        refetchExperiences();
       } else {
         setError("Failed to delete experience entry.");
       }

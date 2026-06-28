@@ -1,10 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import type { Project, ProjectImage } from "@/types/entities";
+import type { Project } from "@/types/entities";
 import { ALLOWED_IMAGE_CONTENT_TYPES, IMAGE_MAX_SIZE, MAX_IMAGES_PER_PROJECT } from "@/lib/validation";
 
 interface ProjectFormProps {
@@ -54,8 +54,7 @@ export function ProjectForm({ project, mode }: ProjectFormProps) {
 
   // ─── Image Upload ──────────────────────────────────────────────────────────
 
-  const handleFileSelect = useCallback(
-    async (files: FileList | null) => {
+  const handleFileSelect = async (files: FileList | null) => {
       if (!files || files.length === 0) return;
 
       setUploadError(null);
@@ -161,9 +160,7 @@ export function ProjectForm({ project, mode }: ProjectFormProps) {
           fileInputRef.current.value = "";
         }
       }
-    },
-    [images.length, project?.id],
-  );
+  };
 
   // ─── Drag & Drop Reorder ──────────────────────────────────────────────────
 
