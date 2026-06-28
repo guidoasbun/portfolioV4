@@ -440,7 +440,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Fail pipeline if secrets are detected
     - _Requirements: 14.7_
 
-- [ ] 13. Checkpoint - Full integration validation
+- [x] 13. Checkpoint - Full integration validation
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 14. Final integration and polish

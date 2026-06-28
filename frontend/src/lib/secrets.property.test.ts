@@ -48,7 +48,7 @@ const SECRETS = [
   {
     key: "cognito",
     label: "Cognito configuration",
-    requiredFields: ["userPoolId", "clientId", "clientSecret"],
+    requiredFields: ["userPoolId", "clientId"],
   },
   {
     key: "s3",
