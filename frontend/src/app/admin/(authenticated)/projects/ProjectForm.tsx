@@ -369,7 +369,7 @@ export function ProjectForm({ project, mode }: ProjectFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-3xl space-y-[var(--spacing-lg)]">
+    <form onSubmit={handleSubmit} className="w-full max-w-[48rem] space-y-6">
       {errors.form && (
         <div
           className="rounded-md border border-error bg-error/10 p-[var(--spacing-md)] text-sm text-error"

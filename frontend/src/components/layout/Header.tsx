@@ -90,7 +90,7 @@ export default function Header() {
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
         >
-          Rodrigo
+          Guido Asbun
         </a>
 
         {/* Desktop navigation - hidden on mobile (< md) */}

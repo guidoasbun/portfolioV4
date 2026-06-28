@@ -24,9 +24,9 @@ export default async function AuthenticatedAdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen w-full bg-background">
       <AdminSidebar />
-      <main className="flex-1 p-spacing-lg md:p-spacing-xl overflow-y-auto">
+      <main className="flex-1 min-w-0 p-6 md:p-8 overflow-y-auto">
         {children}
       </main>
     </div>

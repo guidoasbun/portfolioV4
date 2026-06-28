@@ -65,7 +65,7 @@ export function AboutEditor({
   };
 
   return (
-    <div className="max-w-3xl space-y-[var(--spacing-lg)]">
+    <div className="w-full max-w-[48rem] space-y-6">
       <Input
         label="Personal Description"
         multiline

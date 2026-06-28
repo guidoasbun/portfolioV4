@@ -59,7 +59,7 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full w-full">
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
