@@ -28,6 +28,8 @@ const PUBLIC_API_ROUTES: Array<{ method: string; pattern: RegExp }> = [
   { method: "GET", pattern: /^\/api\/about$/ },
   { method: "GET", pattern: /^\/api\/resumes\/preferred$/ },
   { method: "POST", pattern: /^\/api\/contact$/ },
+  { method: "POST", pattern: /^\/api\/auth\/login$/ },
+  { method: "POST", pattern: /^\/api\/auth\/logout$/ },
 ];
 
 // ─── JWKS Cache ─────────────────────────────────────────────────────────────

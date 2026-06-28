@@ -87,3 +87,13 @@ variable "image_tag" {
   type        = string
   default     = "initial"
 }
+
+variable "cognito_user_pool_id" {
+  description = "Cognito User Pool ID for JWT verification in the proxy"
+  type        = string
+}
+
+variable "dynamodb_table_name" {
+  description = "DynamoDB table name for the application"
+  type        = string
+}

@@ -148,9 +148,11 @@ module "compute" {
   alb_listener_arn     = module.networking.alb_listener_arn
 
   dynamodb_table_arn    = module.storage.dynamodb_table_arn
+  dynamodb_table_name   = module.storage.dynamodb_table_name
   s3_bucket_arn         = module.storage.s3_bucket_arn
   secret_arns           = module.secrets.all_secret_arns
   cognito_user_pool_arn = module.auth.user_pool_arn
+  cognito_user_pool_id  = module.auth.user_pool_id
 }
 
 ################################################################################
