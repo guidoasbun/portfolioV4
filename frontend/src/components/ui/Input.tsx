@@ -26,7 +26,7 @@ const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
     const sharedClasses = [
       "block w-full rounded-md border bg-background px-3 py-2",
       "text-foreground placeholder:text-foreground-subtle",
-      "transition-all duration-200 ease-in-out",
+      "transition-colors duration-200 ease-in-out",
       "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
       error
         ? "border-error focus:ring-error"

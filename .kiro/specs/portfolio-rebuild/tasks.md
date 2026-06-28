@@ -369,21 +369,21 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
 - [x] 10. Checkpoint - Public frontend validation
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 11. Admin panel
-  - [ ] 11.1 Implement admin layout with auth guard and sidebar navigation
+- [x] 11. Admin panel
+  - [x] 11.1 Implement admin layout with auth guard and sidebar navigation
     - Create `frontend/src/app/admin/layout.tsx` with sidebar nav (Projects, Experience, Skills, About, Resumes, Messages)
     - Implement auth guard redirecting to login if no valid session
     - Create admin login page with email/password form
     - Display error messages for invalid credentials (without revealing which field is wrong)
     - _Requirements: 9.1, 9.2, 9.3, 9.5_
 
-  - [ ] 11.2 Implement admin dashboard
+  - [x] 11.2 Implement admin dashboard
     - Create `frontend/src/app/admin/page.tsx` with overview (message count, project count, etc.)
     - Add quick links to content management sections
     - Include logout button that invalidates session and redirects to public site
     - _Requirements: 9.6_
 
-  - [ ] 11.3 Implement project management pages
+  - [x] 11.3 Implement project management pages
     - Create project list page with create/edit/delete actions
     - Create project form with title, description, GitHub URL, deployment URL (optional), published toggle
     - Implement image upload with drag-and-drop reordering (max 10 images)
@@ -391,25 +391,25 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Implement delete confirmation dialog with associated S3 asset cleanup
     - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7_
 
-  - [ ] 11.4 Implement experience management page
+  - [x] 11.4 Implement experience management page
     - Create experience list with create/edit/delete actions
     - Create experience form with job title, company, start date, end date (optional for current role), description
     - _Requirements: 10.8_
 
-  - [ ] 11.5 Implement skills management page
+  - [x] 11.5 Implement skills management page
     - Create skills list grouped by category
     - Support category CRUD (create, edit, delete, reorder)
     - Support skill CRUD within categories
     - _Requirements: 10.9_
 
-  - [ ] 11.6 Implement about content editor and resume management page
+  - [x] 11.6 Implement about content editor and resume management page
     - Create about editor with personal description and professional pitch fields
     - Create resume management page with upload, list, set preferred, and delete actions
     - Implement preferred resume deletion guard (prompt for new preferred or prevent if only one)
     - Show upload validation errors (PDF only, ≤10MB)
     - _Requirements: 10.10, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8_
 
-  - [ ] 11.7 Implement message inbox page
+  - [x] 11.7 Implement message inbox page
     - Create message list with pagination (20/page), sorted by timestamp desc
     - Show sender name, email, truncated body (100 chars), timestamp, read/unread indicator
     - Implement message detail view (marks as read)
@@ -418,7 +418,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - _Requirements: 11.1, 11.2, 11.3, 11.4, 11.5_
 
 - [ ] 12. CI/CD Pipeline
-  - [ ] 12.1 Create Dockerfile for Next.js application
+  - [x] 12.1 Create Dockerfile for Next.js application
     - Create multi-stage Dockerfile (build + production) targeting `linux/arm64`
     - Optimize for small image size (Alpine base)
     - Configure for standalone Next.js output
