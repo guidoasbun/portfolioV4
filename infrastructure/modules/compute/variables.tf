@@ -57,6 +57,11 @@ variable "alb_target_group_arn" {
   type        = string
 }
 
+variable "alb_listener_arn" {
+  description = "ARN of the ALB HTTPS listener (used for dependency ordering)"
+  type        = string
+}
+
 variable "dynamodb_table_arn" {
   description = "ARN of the DynamoDB table for task role policy"
   type        = string

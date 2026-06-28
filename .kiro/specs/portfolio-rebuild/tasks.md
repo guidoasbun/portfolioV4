@@ -417,14 +417,14 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Show empty state if no messages
     - _Requirements: 11.1, 11.2, 11.3, 11.4, 11.5_
 
-- [ ] 12. CI/CD Pipeline
+- [x] 12. CI/CD Pipeline
   - [x] 12.1 Create Dockerfile for Next.js application
     - Create multi-stage Dockerfile (build + production) targeting `linux/arm64`
     - Optimize for small image size (Alpine base)
     - Configure for standalone Next.js output
     - _Requirements: 13.1_
 
-  - [ ] 12.2 Create GitHub Actions workflow for build and deploy
+  - [x] 12.2 Create GitHub Actions workflow for build and deploy
     - Create `.github/workflows/deploy.yml` triggered on push to main
     - Run linting and type-checking as first steps (halt if failed) from `frontend/` directory
     - Build Next.js application and Docker image for `linux/arm64` (using QEMU or native ARM runner) from `frontend/`
@@ -435,7 +435,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Wait for service steady state (10 minute timeout)
     - _Requirements: 13.1, 13.2, 13.3, 13.4, 13.5_
 
-  - [ ] 12.3 Add secrets scanning step to CI pipeline
+  - [x] 12.3 Add secrets scanning step to CI pipeline
     - Add step to verify no sensitive values in source code or build artifacts
     - Fail pipeline if secrets are detected
     - _Requirements: 14.7_

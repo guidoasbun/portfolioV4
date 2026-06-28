@@ -28,7 +28,17 @@ output "alb_target_group_arn" {
   value       = aws_lb_target_group.main.arn
 }
 
+output "alb_listener_arn" {
+  description = "ARN of the HTTPS listener (for dependency ordering)"
+  value       = aws_lb_listener.https.arn
+}
+
 output "alb_dns_name" {
   description = "DNS name of the Application Load Balancer"
   value       = aws_lb.main.dns_name
+}
+
+output "alb_zone_id" {
+  description = "Hosted zone ID of the Application Load Balancer (for Route 53 alias records)"
+  value       = aws_lb.main.zone_id
 }
