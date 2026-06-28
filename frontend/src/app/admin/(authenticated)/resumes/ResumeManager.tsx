@@ -260,7 +260,7 @@ export function ResumeManager({ initialResumes }: ResumeManagerProps) {
   };
 
   return (
-    <div className="max-w-3xl space-y-[var(--spacing-lg)]">
+    <div className="w-full max-w-[48rem] space-y-6">
       {/* Upload section */}
       <div>
         <input
