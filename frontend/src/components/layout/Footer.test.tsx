@@ -7,7 +7,7 @@ describe("Footer", () => {
 
     const currentYear = new Date().getFullYear();
     expect(
-      screen.getByText(`© ${currentYear} Rodrigo`),
+      screen.getByText(`© ${currentYear} Guido Asbun`),
     ).toBeInTheDocument();
   });
 
@@ -38,7 +38,7 @@ describe("Footer", () => {
     render(<Footer />);
 
     const emailLink = screen.getByLabelText("Email");
-    expect(emailLink).toHaveAttribute("href", "mailto:rodrigo@example.com");
+    expect(emailLink).toHaveAttribute("href", "mailto:guido@asbun.io");
     expect(emailLink).not.toHaveAttribute("target");
   });
 
@@ -54,15 +54,15 @@ describe("Footer", () => {
 
     expect(screen.getByLabelText("GitHub")).toHaveAttribute(
       "href",
-      "https://github.com/rodrigo",
+      "https://github.com/guidoasbun",
     );
     expect(screen.getByLabelText("LinkedIn")).toHaveAttribute(
       "href",
-      "https://linkedin.com/in/rodrigo",
+      "https://linkedin.com/in/guidoasbun",
     );
     expect(screen.getByLabelText("Email")).toHaveAttribute(
       "href",
-      "mailto:rodrigo@example.com",
+      "mailto:guido@asbun.io",
     );
   });
 });
