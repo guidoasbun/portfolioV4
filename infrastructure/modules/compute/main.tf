@@ -205,8 +205,10 @@ resource "aws_ecs_task_definition" "app" {
 
   # CI/CD registers new task definition revisions with SHA-tagged images,
   # so Terraform should not revert the image on subsequent applies.
+  # NOTE: temporarily removed ignore_changes to push env vars.
+  # Re-enable after first successful apply with env vars.
   lifecycle {
-    ignore_changes = [container_definitions]
+    ignore_changes = []
   }
 
   tags = {
