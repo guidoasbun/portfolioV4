@@ -146,7 +146,7 @@ export async function PUT(
       },
       updateExpression,
       expressionAttributeNames,
-      ...(Object.keys(expressionAttributeValues).length > 0 && { expressionAttributeValues }),
+      expressionAttributeValues,
     });
 
     if (!updatedItem) {

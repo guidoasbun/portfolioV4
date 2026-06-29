@@ -38,19 +38,23 @@ export function formatDateRange(startDate: string, endDate?: string): string {
  * Returns strings like "2 years", "4 months", "1 year, 3 months".
  */
 export function calculateDuration(startDate: string, endDate?: string): string {
-  const [startYear, startMonth] = startDate.split("-").map(Number);
+  const startParts = startDate.split("-");
+  const startYear = Number(startParts[0]);
+  const startMonth = Number(startParts[1]);
   let endYear: number;
   let endMonth: number;
 
   if (endDate) {
-    [endYear, endMonth] = endDate.split("-").map(Number);
+    const endParts = endDate.split("-");
+    endYear = Number(endParts[0]);
+    endMonth = Number(endParts[1]);
   } else {
     const now = new Date();
     endYear = now.getFullYear();
     endMonth = now.getMonth() + 1;
   }
 
-  let totalMonths = (endYear! - startYear!) * 12 + (endMonth! - startMonth!);
+  let totalMonths = (endYear - startYear) * 12 + (endMonth - startMonth);
   if (totalMonths < 1) totalMonths = 1;
 
   const years = Math.floor(totalMonths / 12);
