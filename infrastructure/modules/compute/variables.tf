@@ -72,6 +72,11 @@ variable "s3_bucket_arn" {
   type        = string
 }
 
+variable "s3_bucket_name" {
+  description = "Name of the S3 assets bucket for environment variable"
+  type        = string
+}
+
 variable "secret_arns" {
   description = "List of Secrets Manager secret ARNs for task role policy"
   type        = list(string)

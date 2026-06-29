@@ -13,6 +13,11 @@ jest.mock("@/components/shared", () => ({
   ),
 }));
 
+// Mock S3 module to avoid AWS client initialization in test env
+jest.mock("@/lib/s3", () => ({
+  getAssetUrl: (key: string) => `https://cdn.test/${key}`,
+}));
+
 // Mock the DynamoDB module
 const mockQueryAllItems = jest.fn();
 jest.mock("@/lib/dynamodb", () => ({
@@ -24,6 +29,9 @@ jest.mock("@/lib/dynamodb", () => ({
     skill: {
       gsi1pk: (categoryId: string) => `SKILLS#${categoryId}`,
     },
+    certification: {
+      gsi1pk: () => "CERTIFICATIONS",
+    },
   },
 }));
 
@@ -31,23 +39,49 @@ beforeEach(() => {
   mockQueryAllItems.mockReset();
 });
 
+/**
+ * Helper to set up mocks for the Skills component.
+ * The component calls Promise.all with:
+ *   1. fetchSkillsGroupedByCategory() — queries SKILLCATS, then SKILLS#<catId> per category
+ *   2. fetchCertifications() — queries CERTIFICATIONS
+ *
+ * Call order with mocks (resolved immediately):
+ *   Call 1: SKILLCATS (categories)
+ *   Call 2: CERTIFICATIONS (certifications)
+ *   Call 3+: SKILLS#<catId> (skills per category)
+ */
+function setupSkillsMock(
+  categories: Array<{ id: string; label: string; displayOrder: number }>,
+  skillsByCategory: Array<Array<{ id: string; name: string; categoryId: string }>>,
+) {
+  // Call 1: categories
+  mockQueryAllItems.mockResolvedValueOnce(categories);
+  // Call 2: certifications (empty by default in skill tests)
+  mockQueryAllItems.mockResolvedValueOnce([]);
+  // Call 3+: skills for each category
+  for (const skills of skillsByCategory) {
+    mockQueryAllItems.mockResolvedValueOnce(skills);
+  }
+}
+
 describe("Skills", () => {
   it("renders skills grouped by category", async () => {
-    // First call: skill categories
-    mockQueryAllItems.mockResolvedValueOnce([
-      { id: "cat-1", label: "Languages", displayOrder: 1 },
-      { id: "cat-2", label: "Frameworks", displayOrder: 2 },
-    ]);
-    // Second call: skills for "Languages" category
-    mockQueryAllItems.mockResolvedValueOnce([
-      { id: "skill-1", name: "TypeScript", categoryId: "cat-1" },
-      { id: "skill-2", name: "Python", categoryId: "cat-1" },
-    ]);
-    // Third call: skills for "Frameworks" category
-    mockQueryAllItems.mockResolvedValueOnce([
-      { id: "skill-3", name: "React", categoryId: "cat-2" },
-      { id: "skill-4", name: "Next.js", categoryId: "cat-2" },
-    ]);
+    setupSkillsMock(
+      [
+        { id: "cat-1", label: "Languages", displayOrder: 1 },
+        { id: "cat-2", label: "Frameworks", displayOrder: 2 },
+      ],
+      [
+        [
+          { id: "skill-1", name: "TypeScript", categoryId: "cat-1" },
+          { id: "skill-2", name: "Python", categoryId: "cat-1" },
+        ],
+        [
+          { id: "skill-3", name: "React", categoryId: "cat-2" },
+          { id: "skill-4", name: "Next.js", categoryId: "cat-2" },
+        ],
+      ],
+    );
 
     const Component = await Skills();
     render(Component);
@@ -62,22 +96,18 @@ describe("Skills", () => {
   });
 
   it("hides empty categories", async () => {
-    // First call: skill categories (3 categories)
-    mockQueryAllItems.mockResolvedValueOnce([
-      { id: "cat-1", label: "Languages", displayOrder: 1 },
-      { id: "cat-2", label: "Empty Category", displayOrder: 2 },
-      { id: "cat-3", label: "Tools", displayOrder: 3 },
-    ]);
-    // Skills for "Languages"
-    mockQueryAllItems.mockResolvedValueOnce([
-      { id: "skill-1", name: "TypeScript", categoryId: "cat-1" },
-    ]);
-    // Skills for "Empty Category" - none
-    mockQueryAllItems.mockResolvedValueOnce([]);
-    // Skills for "Tools"
-    mockQueryAllItems.mockResolvedValueOnce([
-      { id: "skill-2", name: "Docker", categoryId: "cat-3" },
-    ]);
+    setupSkillsMock(
+      [
+        { id: "cat-1", label: "Languages", displayOrder: 1 },
+        { id: "cat-2", label: "Empty Category", displayOrder: 2 },
+        { id: "cat-3", label: "Tools", displayOrder: 3 },
+      ],
+      [
+        [{ id: "skill-1", name: "TypeScript", categoryId: "cat-1" }],
+        [],
+        [{ id: "skill-2", name: "Docker", categoryId: "cat-3" }],
+      ],
+    );
 
     const Component = await Skills();
     render(Component);
@@ -88,8 +118,8 @@ describe("Skills", () => {
   });
 
   it("renders placeholder when no skills exist", async () => {
-    // No categories returned
-    mockQueryAllItems.mockResolvedValueOnce([]);
+    // Categories call returns empty, certifications call returns empty
+    setupSkillsMock([], []);
 
     const Component = await Skills();
     render(Component);
@@ -111,18 +141,18 @@ describe("Skills", () => {
   });
 
   it("renders the section with correct id and heading", async () => {
-    mockQueryAllItems.mockResolvedValueOnce([]);
+    setupSkillsMock([], []);
 
     const Component = await Skills();
     render(Component);
 
     const section = document.getElementById("skills");
     expect(section).toBeInTheDocument();
-    expect(screen.getByText("Skills")).toBeInTheDocument();
+    expect(screen.getByText("Skills & Technologies")).toBeInTheDocument();
   });
 
   it("has accessible section with aria-labelledby", async () => {
-    mockQueryAllItems.mockResolvedValueOnce([]);
+    setupSkillsMock([], []);
 
     const Component = await Skills();
     render(Component);

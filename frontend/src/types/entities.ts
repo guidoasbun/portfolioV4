@@ -44,6 +44,20 @@ export interface Experience {
   updatedAt: string;
 }
 
+// ─── Certification ──────────────────────────────────────────────────────────
+
+export interface Certification {
+  id: string;
+  issuer: string;
+  name: string;
+  verificationUrl: string;
+  badgeS3Key?: string;
+  badgeUrl?: string;
+  displayOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 // ─── Skills ─────────────────────────────────────────────────────────────────
 
 export interface Skill {

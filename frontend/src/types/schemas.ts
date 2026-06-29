@@ -207,6 +207,22 @@ export const updateAboutRequestSchema = z.object({
   professionalPitch: z.string().max(5000).optional(),
 });
 
+// ─── Certification ──────────────────────────────────────────────────────────
+
+export const createCertificationRequestSchema = z.object({
+  issuer: z.string().min(1).max(200),
+  name: z.string().min(1).max(200),
+  verificationUrl: urlString,
+  displayOrder: z.number().int().min(0).optional().default(0),
+});
+
+export const updateCertificationRequestSchema = z.object({
+  issuer: z.string().min(1).max(200).optional(),
+  name: z.string().min(1).max(200).optional(),
+  verificationUrl: urlString.optional(),
+  displayOrder: z.number().int().min(0).optional(),
+});
+
 // ─── Inferred Types from Schemas ────────────────────────────────────────────
 
 export type ProjectImageInput = z.infer<typeof projectImageSchema>;
