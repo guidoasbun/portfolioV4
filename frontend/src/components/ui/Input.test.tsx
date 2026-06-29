@@ -35,8 +35,8 @@ describe("Input", () => {
     const user = userEvent.setup();
     render(<Input label="Name" />);
     const input = screen.getByLabelText("Name");
-    await user.type(input, "Rodrigo");
-    expect(input).toHaveValue("Rodrigo");
+    await user.type(input, "Guido Asbun");
+    expect(input).toHaveValue("Guido Asbun");
   });
 
   it("has focus ring classes", () => {

@@ -18,7 +18,7 @@ test.describe("Public Navigation", () => {
     });
 
     test("page has correct title", async ({ page }) => {
-      await expect(page).toHaveTitle(/Rodrigo/i);
+      await expect(page).toHaveTitle(/Guido Asbun/i);
     });
 
     test("main content area is present", async ({ page }) => {

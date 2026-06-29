@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://rodrigo.dev";
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://guido-asbun.com;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
