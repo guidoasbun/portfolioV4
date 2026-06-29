@@ -13,6 +13,7 @@ import { getAssetUrl } from "@/lib/s3";
 import { Placeholder } from "@/components/shared";
 import { ScrollAnimation } from "@/components/shared";
 import type { Certification } from "@/types/entities";
+import Image from "next/image";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -156,10 +157,13 @@ export async function Skills() {
                   >
                     {/* Badge image */}
                     {cert.badgeUrl ? (
-                      <img
+                      <Image
                         src={cert.badgeUrl}
                         alt={`${cert.name} badge`}
+                        width={64}
+                        height={64}
                         className="w-16 h-16 object-contain shrink-0"
+                        unoptimized
                       />
                     ) : (
                       <div className="w-16 h-16 rounded-lg bg-surface-elevated flex items-center justify-center shrink-0">
