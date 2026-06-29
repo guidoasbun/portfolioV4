@@ -329,6 +329,7 @@ export default function CertificationsPage() {
                 {/* Badge preview */}
                 <div className="shrink-0 w-16 h-16 rounded-lg bg-surface-elevated flex items-center justify-center overflow-hidden">
                   {cert.badgeUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img src={cert.badgeUrl} alt={`${cert.name} badge`} className="w-full h-full object-contain" />
                   ) : (
                     <span className="text-xs text-foreground-muted">No badge</span>
