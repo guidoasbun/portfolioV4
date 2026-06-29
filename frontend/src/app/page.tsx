@@ -1,6 +1,6 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import Hero from "@/components/sections/Hero";
+import Home from "@/components/sections/Home";
 import About from "@/components/sections/About";
 import { Projects } from "@/components/sections/Projects";
 import ExperienceSection from "@/components/sections/Experience";
@@ -16,12 +16,12 @@ export const dynamic = "force-dynamic";
  *
  * Validates: Requirements 1.1, 16.1
  */
-export default function Home() {
+export default function HomePage() {
   return (
     <>
       <Header />
       <main id="main-content" className="pt-16">
-        <Hero />
+        <Home />
         <About />
         <Projects />
         <ExperienceSection />

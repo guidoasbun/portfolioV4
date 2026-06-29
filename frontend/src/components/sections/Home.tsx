@@ -36,7 +36,7 @@ const SOCIAL_LINKS = [
   },
 ];
 
-export default function Hero() {
+export default function Home() {
   return (
     <section
       id="home"
