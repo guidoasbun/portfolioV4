@@ -14,9 +14,12 @@ function mapToExperience(item: DynamoDBItem): Experience {
     id: item.id as string,
     jobTitle: item.jobTitle as string,
     company: item.company as string,
+    type: (item.experienceType as Experience["type"]) ?? "full-time",
+    location: (item.location as string) ?? undefined,
     startDate: item.startDate as string,
     endDate: (item.endDate as string) ?? undefined,
     description: item.description as string,
+    tags: (item.tags as string[]) ?? undefined,
     createdAt: item.createdAt as string,
     updatedAt: item.updatedAt as string,
   };
@@ -93,7 +96,7 @@ export async function POST(request: Request): Promise<Response> {
       return Response.json(response, { status: 400 });
     }
 
-    const { jobTitle, company, startDate, endDate, description } = parseResult.data;
+    const { jobTitle, company, type, location, startDate, endDate, description, tags } = parseResult.data;
     const id = crypto.randomUUID();
     const now = new Date().toISOString();
 
@@ -107,9 +110,12 @@ export async function POST(request: Request): Promise<Response> {
       id,
       jobTitle,
       company,
+      experienceType: type,
+      location,
       startDate,
       endDate,
       description,
+      tags,
       createdAt: now,
       updatedAt: now,
     });
@@ -118,9 +124,12 @@ export async function POST(request: Request): Promise<Response> {
       id,
       jobTitle,
       company,
+      type,
+      location,
       startDate,
       endDate,
       description,
+      tags,
       createdAt: now,
       updatedAt: now,
     };

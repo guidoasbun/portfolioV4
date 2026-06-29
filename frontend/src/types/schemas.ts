@@ -39,13 +39,18 @@ export const projectSchema = z.object({
 
 // ─── Experience ─────────────────────────────────────────────────────────────
 
+export const experienceTypeSchema = z.enum(["full-time", "internship", "education"]);
+
 export const experienceSchema = z.object({
   id: uuid,
   jobTitle: z.string().min(1).max(200),
   company: z.string().min(1).max(200),
+  type: experienceTypeSchema,
+  location: z.string().max(200).optional(),
   startDate: yearMonth,
   endDate: yearMonth.optional(),
   description: z.string().min(1).max(5000),
+  tags: z.array(z.string().max(50)).max(20).optional(),
   createdAt: isoDateTime,
   updatedAt: isoDateTime,
 });
@@ -158,17 +163,23 @@ export const updateProjectRequestSchema = z.object({
 export const createExperienceRequestSchema = z.object({
   jobTitle: z.string().min(1).max(200),
   company: z.string().min(1).max(200),
+  type: experienceTypeSchema,
+  location: z.string().max(200).optional(),
   startDate: yearMonth,
   endDate: yearMonth.optional(),
   description: z.string().min(1).max(5000),
+  tags: z.array(z.string().max(50)).max(20).optional(),
 });
 
 export const updateExperienceRequestSchema = z.object({
   jobTitle: z.string().min(1).max(200).optional(),
   company: z.string().min(1).max(200).optional(),
+  type: experienceTypeSchema.optional(),
+  location: z.string().max(200).optional().nullable(),
   startDate: yearMonth.optional(),
-  endDate: yearMonth.optional(),
+  endDate: yearMonth.optional().nullable(),
   description: z.string().min(1).max(5000).optional(),
+  tags: z.array(z.string().max(50)).max(20).optional().nullable(),
 });
 
 export const createSkillRequestSchema = z.object({

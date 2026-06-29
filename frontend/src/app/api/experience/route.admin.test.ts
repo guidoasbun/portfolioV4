@@ -53,6 +53,7 @@ describe("POST /api/experience", () => {
   const validBody = {
     jobTitle: "Senior Developer",
     company: "TechCorp",
+    type: "full-time",
     startDate: "2024-01",
     description: "Leading frontend team",
   };
@@ -89,6 +90,7 @@ describe("POST /api/experience", () => {
         id: mockUUID,
         jobTitle: "Senior Developer",
         company: "TechCorp",
+        experienceType: "full-time",
         startDate: "2024-01",
         description: "Leading frontend team",
       }),

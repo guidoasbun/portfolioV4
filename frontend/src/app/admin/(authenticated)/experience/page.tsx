@@ -20,19 +20,25 @@ import type { ApiResponse } from "@/types/api";
 interface ExperienceFormData {
   jobTitle: string;
   company: string;
+  type: "full-time" | "internship" | "education";
+  location: string;
   startDate: string;
   endDate: string;
   isCurrentRole: boolean;
   description: string;
+  tags: string;
 }
 
 const EMPTY_FORM: ExperienceFormData = {
   jobTitle: "",
   company: "",
+  type: "full-time",
+  location: "",
   startDate: "",
   endDate: "",
   isCurrentRole: false,
   description: "",
+  tags: "",
 };
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -110,10 +116,13 @@ export default function ExperienceManagementPage() {
     setFormData({
       jobTitle: exp.jobTitle,
       company: exp.company,
+      type: exp.type,
+      location: exp.location ?? "",
       startDate: exp.startDate,
       endDate: exp.endDate ?? "",
       isCurrentRole: !exp.endDate,
       description: exp.description,
+      tags: exp.tags?.join(", ") ?? "",
     });
     setFormErrors({});
     setShowForm(true);
@@ -145,6 +154,7 @@ export default function ExperienceManagementPage() {
     const errors: Record<string, string> = {};
     if (!formData.jobTitle.trim()) errors.jobTitle = "Job title is required";
     if (!formData.company.trim()) errors.company = "Company is required";
+    if (!formData.type) errors.type = "Type is required";
     if (!formData.startDate) errors.startDate = "Start date is required";
     if (!formData.isCurrentRole && !formData.endDate) {
       errors.endDate = "End date is required (or mark as current role)";
@@ -163,9 +173,14 @@ export default function ExperienceManagementPage() {
       const payload = {
         jobTitle: formData.jobTitle.trim(),
         company: formData.company.trim(),
+        type: formData.type,
+        location: formData.location.trim() || null,
         startDate: formData.startDate,
-        endDate: formData.isCurrentRole ? undefined : formData.endDate,
+        endDate: formData.isCurrentRole ? null : (formData.endDate || null),
         description: formData.description.trim(),
+        tags: formData.tags.trim()
+          ? formData.tags.split(",").map((t) => t.trim()).filter(Boolean)
+          : null,
       };
 
       const url = editingId
@@ -286,6 +301,35 @@ export default function ExperienceManagementPage() {
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-spacing-md">
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-1">
+                  Type <span className="text-error">*</span>
+                </label>
+                <select
+                  value={formData.type}
+                  onChange={(e) => handleFieldChange("type", e.target.value)}
+                  className="w-full min-h-[44px] px-3 py-2 rounded-md border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="full-time">Full-time</option>
+                  <option value="internship">Internship</option>
+                  <option value="education">Education</option>
+                </select>
+                {formErrors.type && (
+                  <p className="mt-1 text-xs text-error">{formErrors.type}</p>
+                )}
+              </div>
+
+              <Input
+                label="Location"
+                value={formData.location}
+                onChange={(e) =>
+                  handleFieldChange("location", (e.target as HTMLInputElement).value)
+                }
+                placeholder="e.g. San Francisco, CA (Remote)"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-spacing-md">
               <Input
                 label="Start Date"
                 type="month"
@@ -340,6 +384,15 @@ export default function ExperienceManagementPage() {
               placeholder="Describe your role and responsibilities..."
             />
 
+            <Input
+              label="Tags (comma-separated)"
+              value={formData.tags}
+              onChange={(e) =>
+                handleFieldChange("tags", (e.target as HTMLInputElement).value)
+              }
+              placeholder="e.g. React, Docker, CI/CD, AWS"
+            />
+
             <div className="flex gap-spacing-sm">
               <Button type="submit" disabled={isSaving}>
                 {isSaving
@@ -375,16 +428,33 @@ export default function ExperienceManagementPage() {
             >
               <div className="flex items-start justify-between gap-spacing-md">
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-base font-semibold text-foreground">
-                    {exp.jobTitle}
-                  </h3>
-                  <p className="text-sm text-foreground-muted">{exp.company}</p>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-base font-semibold text-foreground">
+                      {exp.jobTitle}
+                    </h3>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-surface-elevated text-foreground-muted capitalize">
+                      {exp.type}
+                    </span>
+                  </div>
+                  <p className="text-sm text-foreground-muted">
+                    {exp.company}
+                    {exp.location && ` · ${exp.location}`}
+                  </p>
                   <p className="text-xs text-foreground-muted mt-1">
                     {formatDateRange(exp.startDate, exp.endDate)}
                   </p>
                   <p className="text-sm text-foreground mt-spacing-sm line-clamp-2">
                     {exp.description}
                   </p>
+                  {exp.tags && exp.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {exp.tags.map((tag) => (
+                        <span key={tag} className="text-xs bg-surface-elevated px-1.5 py-0.5 rounded text-foreground-muted">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex gap-spacing-xs shrink-0">

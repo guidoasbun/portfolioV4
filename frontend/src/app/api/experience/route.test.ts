@@ -143,6 +143,7 @@ describe("GET /api/experience", () => {
       id: "abc",
       jobTitle: "Full Stack Engineer",
       company: "MegaCorp",
+      type: "full-time",
       startDate: "2023-03",
       endDate: "2024-01",
       description: "Worked on distributed systems",
@@ -153,6 +154,5 @@ describe("GET /api/experience", () => {
     expect(experience.SK).toBeUndefined();
     expect(experience.GSI1PK).toBeUndefined();
     expect(experience.GSI1SK).toBeUndefined();
-    expect(experience.type).toBeUndefined();
   });
 });

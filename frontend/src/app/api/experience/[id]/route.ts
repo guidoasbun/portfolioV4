@@ -18,9 +18,12 @@ interface ExperienceDynamoItem extends DynamoDBItem {
   id: string;
   jobTitle: string;
   company: string;
+  experienceType?: string;
+  location?: string;
   startDate: string;
   endDate?: string;
   description: string;
+  tags?: string[];
   createdAt: string;
   updatedAt: string;
 }
@@ -71,7 +74,7 @@ export async function PUT(
 
     const updates = parseResult.data;
 
-    // Check if there are any fields to update
+    // Check if there are any fields to update (undefined means "not provided", null means "clear it")
     const updateFields = Object.entries(updates).filter(([, v]) => v !== undefined);
     if (updateFields.length === 0) {
       const response: ApiResponse = { success: false, error: "No fields to update" };
@@ -92,27 +95,48 @@ export async function PUT(
     // Build update expression
     const now = new Date().toISOString();
     const expressionAttributeNames: Record<string, string> = {};
-    const expressionAttributeValues: Record<string, string> = {};
-    const updateParts: string[] = [];
+    const expressionAttributeValues: Record<string, unknown> = {};
+    const setParts: string[] = [];
+    const removeParts: string[] = [];
 
     for (const [key, value] of updateFields) {
-      const attrName = `#${key}`;
-      const attrValue = `:${key}`;
-      expressionAttributeNames[attrName] = key;
-      expressionAttributeValues[attrValue] = value as string;
-      updateParts.push(`${attrName} = ${attrValue}`);
+      // Map schema field "type" to DynamoDB attribute "experienceType"
+      // to avoid conflict with the entity type discriminator field.
+      const dbKey = key === "type" ? "experienceType" : key;
+
+      if (value === null) {
+        // null means "clear this field" — use REMOVE
+        const attrName = `#${dbKey}`;
+        expressionAttributeNames[attrName] = dbKey;
+        removeParts.push(attrName);
+      } else {
+        const attrName = `#${dbKey}`;
+        const attrValue = `:${dbKey}`;
+        expressionAttributeNames[attrName] = dbKey;
+        expressionAttributeValues[attrValue] = value;
+        setParts.push(`${attrName} = ${attrValue}`);
+      }
     }
 
     // Always update updatedAt
     expressionAttributeNames["#updatedAt"] = "updatedAt";
     expressionAttributeValues[":updatedAt"] = now;
-    updateParts.push("#updatedAt = :updatedAt");
+    setParts.push("#updatedAt = :updatedAt");
 
     // If startDate changes, update GSI1SK too
     if (updates.startDate) {
       expressionAttributeNames["#GSI1SK"] = "GSI1SK";
       expressionAttributeValues[":GSI1SK"] = Keys.experience.gsi1sk(updates.startDate);
-      updateParts.push("#GSI1SK = :GSI1SK");
+      setParts.push("#GSI1SK = :GSI1SK");
+    }
+
+    // Build the full update expression
+    let updateExpression = "";
+    if (setParts.length > 0) {
+      updateExpression += `SET ${setParts.join(", ")}`;
+    }
+    if (removeParts.length > 0) {
+      updateExpression += ` REMOVE ${removeParts.join(", ")}`;
     }
 
     const updatedItem = await updateItem<ExperienceDynamoItem>({
@@ -120,9 +144,9 @@ export async function PUT(
         PK: Keys.experience.pk(id),
         SK: Keys.experience.sk(),
       },
-      updateExpression: `SET ${updateParts.join(", ")}`,
+      updateExpression,
       expressionAttributeNames,
-      expressionAttributeValues,
+      ...(Object.keys(expressionAttributeValues).length > 0 && { expressionAttributeValues }),
     });
 
     if (!updatedItem) {
@@ -134,9 +158,12 @@ export async function PUT(
       id: updatedItem.id,
       jobTitle: updatedItem.jobTitle,
       company: updatedItem.company,
+      type: (updatedItem.experienceType as Experience["type"]) ?? "full-time",
+      location: updatedItem.location,
       startDate: updatedItem.startDate,
       endDate: updatedItem.endDate,
       description: updatedItem.description,
+      tags: updatedItem.tags,
       createdAt: updatedItem.createdAt,
       updatedAt: updatedItem.updatedAt,
     };

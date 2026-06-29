@@ -28,13 +28,18 @@ export interface Project {
 
 // ─── Experience ─────────────────────────────────────────────────────────────
 
+export type ExperienceType = "full-time" | "internship" | "education";
+
 export interface Experience {
   id: string;
   jobTitle: string;
   company: string;
+  type: ExperienceType;
+  location?: string;
   startDate: string;
   endDate?: string;
   description: string;
+  tags?: string[];
   createdAt: string;
   updatedAt: string;
 }
