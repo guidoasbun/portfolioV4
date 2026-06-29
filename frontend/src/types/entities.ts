@@ -28,13 +28,32 @@ export interface Project {
 
 // ─── Experience ─────────────────────────────────────────────────────────────
 
+export type ExperienceType = "full-time" | "internship" | "education";
+
 export interface Experience {
   id: string;
   jobTitle: string;
   company: string;
+  type: ExperienceType;
+  location?: string;
   startDate: string;
   endDate?: string;
   description: string;
+  tags?: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ─── Certification ──────────────────────────────────────────────────────────
+
+export interface Certification {
+  id: string;
+  issuer: string;
+  name: string;
+  verificationUrl: string;
+  badgeS3Key?: string;
+  badgeUrl?: string;
+  displayOrder: number;
   createdAt: string;
   updatedAt: string;
 }

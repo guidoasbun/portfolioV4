@@ -92,6 +92,13 @@ export const Keys = {
     pk: () => "WEBRESUME" as const,
     sk: () => "CONTENT" as const,
   },
+
+  certification: {
+    pk: (id: string) => `CERT#${id}`,
+    sk: () => "META" as const,
+    gsi1pk: () => "CERTIFICATIONS" as const,
+    gsi1sk: (displayOrder: number) => `ORDER#${String(displayOrder).padStart(5, "0")}`,
+  },
 } as const;
 
 // ─── Types ──────────────────────────────────────────────────────────────────

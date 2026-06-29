@@ -24,7 +24,7 @@ const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
     const errorId = `${inputId}-error`;
 
     const sharedClasses = [
-      "block w-full rounded-md border bg-background px-3 py-2",
+      "block w-full rounded-md border bg-background px-3 py-2 min-h-[44px]",
       "text-foreground placeholder:text-foreground-subtle",
       "transition-colors duration-200 ease-in-out",
       "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",

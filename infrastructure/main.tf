@@ -105,7 +105,7 @@ module "storage" {
 
   project_name    = var.project_name
   environment     = var.environment
-  allowed_origins = ["https://${var.domain_name}", "https://www.${var.domain_name}"]
+  allowed_origins = ["https://${var.domain_name}", "https://www.${var.domain_name}", "http://localhost:3000"]
 }
 
 ################################################################################
@@ -150,6 +150,7 @@ module "compute" {
   dynamodb_table_arn    = module.storage.dynamodb_table_arn
   dynamodb_table_name   = module.storage.dynamodb_table_name
   s3_bucket_arn         = module.storage.s3_bucket_arn
+  s3_bucket_name        = module.storage.s3_bucket_name
   secret_arns           = module.secrets.all_secret_arns
   cognito_user_pool_arn = module.auth.user_pool_arn
   cognito_user_pool_id  = module.auth.user_pool_id

@@ -20,7 +20,7 @@ function ProjectGrid({ projects }: ProjectGridProps) {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-[var(--spacing-lg)] md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-lg md:grid-cols-2 lg:grid-cols-3">
         {projects.map((project, index) => (
           <ScrollAnimation
             key={project.id}
@@ -57,7 +57,7 @@ function ProjectGrid({ projects }: ProjectGridProps) {
               )}
 
               {/* Title */}
-              <div className="p-[var(--spacing-md)]">
+              <div className="p-md">
                 <h3 className="text-[length:var(--font-size-lg)] font-semibold text-foreground">
                   {project.title}
                 </h3>

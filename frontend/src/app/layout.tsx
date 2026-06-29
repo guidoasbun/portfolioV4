@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Rodrigo — Full-Stack Software Engineer",
-    template: "%s | Rodrigo's Portfolio",
+    default: "Guido Asbun — Full-Stack Software Engineer",
+    template: "%s | Guido Asbun's Portfolio",
   },
   description:
     "Full-stack software engineer portfolio showcasing projects, experience, and technical skills.",
@@ -59,7 +59,10 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="min-h-full w-full">
+      <body className="min-h-full w-full overflow-x-hidden">
+        <a href="#main-content" className="skip-to-content">
+          Skip to content
+        </a>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

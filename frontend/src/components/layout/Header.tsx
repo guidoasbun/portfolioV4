@@ -84,7 +84,7 @@ export default function Header() {
         {/* Site brand / name */}
         <a
           href="#"
-          className="text-lg font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm"
+          className="inline-flex items-center min-h-[44px] text-lg font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm"
           onClick={(e) => {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: "smooth" });

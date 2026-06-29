@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 const MAX_TITLE_LENGTH = 60;
 const MAX_DESCRIPTION_LENGTH = 160;
 
-const SITE_NAME = "Rodrigo's Portfolio";
+const SITE_NAME = "Guido Asbun's Portfolio";
 const DEFAULT_DESCRIPTION =
   "Full-stack software engineer portfolio showcasing projects, experience, and technical skills.";
 
@@ -52,15 +52,15 @@ export function generatePageMetadata(
  */
 export const PAGE_METADATA = {
   home: generatePageMetadata(
-    "Rodrigo — Full-Stack Software Engineer",
+    "Guido Asbun — Full-Stack Software Engineer",
     "Full-stack software engineer portfolio showcasing projects, experience, and technical skills.",
   ),
   resume: generatePageMetadata(
-    "Resume — Rodrigo",
+    "Resume — Guido Asbun",
     "View and download my professional resume with experience, education, and skills.",
   ),
   projects: generatePageMetadata(
-    "Projects — Rodrigo",
+    "Projects — Guido Asbun",
     "Browse my portfolio of software engineering projects built with modern technologies.",
   ),
 } as const;

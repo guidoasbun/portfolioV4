@@ -12,6 +12,7 @@ import { getAssetUrl } from "@/lib/s3";
 import { createProjectRequestSchema } from "@/types/schemas";
 import type { Project, ProjectImage } from "@/types/entities";
 import type { ApiResponse } from "@/types/api";
+import { revalidateHomePage } from "@/lib/revalidate";
 
 interface ProjectDynamoItem extends DynamoDBItem {
   id: string;
@@ -155,6 +156,9 @@ export async function POST(request: Request): Promise<Response> {
       createdAt: now,
       updatedAt: now,
     };
+
+    // Invalidate cached home page so visitors see new project (if published)
+    revalidateHomePage();
 
     const response: ApiResponse<Project> = {
       success: true,

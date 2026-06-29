@@ -56,6 +56,13 @@ export function resumeKey(resumeId: string): string {
   return `resumes/${resumeId}.pdf`;
 }
 
+/**
+ * Generate an S3 key for a certification badge image.
+ */
+export function certificationBadgeKey(certId: string, ext: string): string {
+  return `certifications/${certId}.${ext}`;
+}
+
 // ─── Presigned URL Generation ───────────────────────────────────────────────
 
 /**

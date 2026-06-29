@@ -189,6 +189,8 @@ resource "aws_ecs_task_definition" "app" {
         { name = "AWS_REGION", value = var.aws_region },
         { name = "COGNITO_USER_POOL_ID", value = var.cognito_user_pool_id },
         { name = "DYNAMODB_TABLE_NAME", value = var.dynamodb_table_name },
+        { name = "S3_BUCKET_NAME", value = var.s3_bucket_name },
+        { name = "S3_PUBLIC_URL", value = "https://${var.s3_bucket_name}.s3.${var.aws_region}.amazonaws.com" },
         { name = "NODE_ENV", value = "production" },
       ]
 

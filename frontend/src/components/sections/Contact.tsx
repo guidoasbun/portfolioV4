@@ -161,7 +161,7 @@ export default function Contact() {
                   type="button"
                   onClick={dismissSuccess}
                   aria-label="Dismiss success message"
-                  className="ml-sm rounded p-1 text-success hover:bg-success/20 focus:outline-none focus:ring-2 focus:ring-success"
+                  className="ml-sm inline-flex items-center justify-center min-w-[44px] min-h-[44px] rounded-md text-success hover:bg-success/20 focus:outline-none focus:ring-2 focus:ring-success"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

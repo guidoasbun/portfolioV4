@@ -60,7 +60,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-border bg-surface px-md py-lg">
       <div className="mx-auto flex max-w-[80rem] flex-col items-center gap-md sm:flex-row sm:justify-between">
-        <nav aria-label="Social media links" className="flex gap-lg">
+        <nav aria-label="Social media links" className="flex gap-sm">
           {socialLinks.map((link) => {
             const isExternal = link.href.startsWith("http");
             return (
@@ -69,7 +69,7 @@ export default function Footer() {
                 href={link.href}
                 {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 aria-label={link.name}
-                className="text-foreground-muted transition-colors hover:text-primary"
+                className="inline-flex items-center justify-center min-w-[44px] min-h-[44px] rounded-md text-foreground-muted transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               >
                 {link.icon}
               </a>

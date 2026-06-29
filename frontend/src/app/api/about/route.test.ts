@@ -27,7 +27,7 @@ describe("GET /api/about", () => {
     const aboutData = {
       PK: "ABOUT",
       SK: "CONTENT",
-      personalDescription: "Hi, I am Rodrigo.",
+      personalDescription: "Hi, I am Guido Asbun.",
       professionalPitch: "Full-stack developer with 10 years experience.",
       updatedAt: "2024-01-15T10:30:00Z",
     };
@@ -41,7 +41,7 @@ describe("GET /api/about", () => {
     expect(body).toEqual({
       success: true,
       data: {
-        personalDescription: "Hi, I am Rodrigo.",
+        personalDescription: "Hi, I am Guido Asbun.",
         professionalPitch: "Full-stack developer with 10 years experience.",
         updatedAt: "2024-01-15T10:30:00Z",
       },

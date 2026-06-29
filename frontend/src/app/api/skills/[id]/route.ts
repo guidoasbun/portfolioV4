@@ -8,6 +8,7 @@ import { getItem, putItem, deleteItem, Keys } from "@/lib/dynamodb";
 import type { DynamoDBItem } from "@/lib/dynamodb";
 import type { ApiResponse } from "@/types/api";
 import { updateSkillRequestSchema } from "@/types/schemas";
+import { revalidateHomePage } from "@/lib/revalidate";
 
 interface SkillDynamoItem extends DynamoDBItem {
   id: string;
@@ -137,6 +138,9 @@ export async function PUT(
       });
     }
 
+    // Invalidate cached home page so visitors see updated skill
+    revalidateHomePage();
+
     const response: ApiResponse<{ id: string; name: string; categoryId: string; createdAt: string; updatedAt: string }> = {
       success: true,
       data: { id, name: newName, categoryId: newCategoryId, createdAt: existing.createdAt, updatedAt: now },
@@ -177,6 +181,9 @@ export async function DELETE(
       PK: Keys.skill.pk(id),
       SK: Keys.skill.sk(),
     });
+
+    // Invalidate cached home page so visitors see skill removal
+    revalidateHomePage();
 
     const response: ApiResponse = {
       success: true,
