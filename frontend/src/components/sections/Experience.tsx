@@ -48,11 +48,15 @@ export default async function ExperienceSection() {
   return (
     <section
       id="experience"
-      className="px-[var(--spacing-md)] py-[var(--spacing-3xl)]"
+      aria-labelledby="experience-heading"
+      className="px-md py-3xl"
     >
       <div className="mx-auto max-w-[56rem]">
         <ScrollAnimation animation="fade-in">
-          <h2 className="mb-[var(--spacing-2xl)] text-center text-[var(--font-size-h2)] font-bold leading-[var(--line-height-tight)] text-foreground">
+          <h2
+            id="experience-heading"
+            className="mb-2xl text-center text-[length:var(--font-size-h2)] font-bold leading-[var(--line-height-tight)] text-foreground"
+          >
             Experience
           </h2>
         </ScrollAnimation>
@@ -67,7 +71,7 @@ export default async function ExperienceSection() {
               aria-hidden="true"
             />
 
-            <div className="flex flex-col gap-[var(--spacing-xl)]">
+            <div className="flex flex-col gap-xl">
               {experiences.map((entry, index) => (
                 <ScrollAnimation
                   key={entry.id}
@@ -91,16 +95,16 @@ export default async function ExperienceSection() {
                       aria-hidden="true"
                     />
 
-                    <h3 className="text-[var(--font-size-h5)] font-semibold text-foreground">
+                    <h3 className="text-[length:var(--font-size-h5)] font-semibold text-foreground">
                       {entry.jobTitle}
                     </h3>
-                    <p className="text-[var(--font-size-base)] font-medium text-primary">
+                    <p className="text-base font-medium text-primary">
                       {entry.company}
                     </p>
-                    <p className="mt-[var(--spacing-xs)] text-[var(--font-size-sm)] text-foreground-muted">
+                    <p className="mt-xs text-sm text-foreground-muted">
                       {formatDateRange(entry.startDate, entry.endDate)}
                     </p>
-                    <p className="mt-[var(--spacing-sm)] text-[var(--font-size-base)] leading-[var(--line-height-normal)] text-foreground-muted">
+                    <p className="mt-sm text-base leading-[var(--line-height-normal)] text-foreground-muted">
                       {entry.description}
                     </p>
                   </div>

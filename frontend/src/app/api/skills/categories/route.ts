@@ -7,6 +7,7 @@ import { queryItems, putItem, Keys } from "@/lib/dynamodb";
 import type { DynamoDBItem } from "@/lib/dynamodb";
 import type { ApiResponse } from "@/types/api";
 import { createSkillCategoryRequestSchema } from "@/types/schemas";
+import { revalidateHomePage } from "@/lib/revalidate";
 
 interface SkillCategoryDynamoItem extends DynamoDBItem {
   id: string;
@@ -98,6 +99,9 @@ export async function POST(request: Request): Promise<Response> {
       createdAt: now,
       updatedAt: now,
     });
+
+    // Invalidate cached home page so visitors see updated skill categories
+    revalidateHomePage();
 
     const response: ApiResponse<{ id: string; label: string; displayOrder: number; createdAt: string; updatedAt: string }> = {
       success: true,

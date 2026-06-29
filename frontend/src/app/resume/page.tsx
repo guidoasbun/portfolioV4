@@ -92,7 +92,7 @@ export default async function ResumePage() {
   const hasContent = sections.length > 0;
 
   return (
-    <main className="px-md py-3xl">
+    <main id="main-content" className="px-md py-3xl">
       <div className="mx-auto max-w-[56rem]">
         <h1 className="mb-2xl text-center text-foreground">Resume</h1>
 

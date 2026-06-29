@@ -6,7 +6,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
 
 ## Tasks
 
-- [ ] 1. Project scaffolding and core configuration
+- [x] 1. Project scaffolding and core configuration
   - [x] 1.1 Initialize Next.js project with App Router and TypeScript
     - Create Next.js app with `create-next-app` using App Router, TypeScript, Tailwind CSS
     - Configure `tsconfig.json` with strict mode and path aliases
@@ -443,27 +443,27 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
 - [x] 13. Checkpoint - Full integration validation
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 14. Final integration and polish
-  - [ ] 14.1 Wire admin content updates to public site refresh
+- [x] 14. Final integration and polish
+  - [x] 14.1 Wire admin content updates to public site refresh
     - Ensure admin edits to about, projects, experience, skills reflect on public site within 10 seconds
     - Implement revalidation strategy (on-demand or short cache TTL)
     - _Requirements: 2.4, 6.3, 7.3_
 
-  - [ ] 14.2 Implement responsive design polish and accessibility audit
+  - [x] 14.2 Implement responsive design polish and accessibility audit
     - Verify all pages render correctly from 320px to 2560px without horizontal scroll
     - Verify all spacing, colors, and font sizes map to design scale tokens
     - Verify touch targets ≥44x44px on mobile
     - Add ARIA labels and ensure keyboard accessibility throughout
     - _Requirements: 15.1, 15.2, 15.6, 15.8, 1.5_
 
-  - [ ]* 14.3 Write unit tests for key UI components
+  - [x] 14.3 Write unit tests for key UI components
     - Test component rendering with mock data (About, Projects, Experience, Skills, Contact)
     - Test empty state placeholders
     - Test conditional rendering (deployment links, download buttons)
     - Test navigation scroll behavior and mobile menu toggle
     - _Requirements: 2.6, 5.3, 6.4, 7.5_
 
-  - [ ]* 14.4 Write E2E tests with Playwright
+  - [x] 14.4 Write E2E tests with Playwright
     - Test public page load and navigation flow
     - Test contact form submission (success and validation errors)
     - Test theme toggle persistence
@@ -471,7 +471,7 @@ Full-stack portfolio website rebuild using Next.js App Router on AWS infrastruct
     - Test resume upload and download
     - _Requirements: 1.3, 8.2, 8.3, 9.1, 17.2_
 
-- [ ] 15. Final checkpoint - Ensure all tests pass
+- [x] 15. Final checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Notes

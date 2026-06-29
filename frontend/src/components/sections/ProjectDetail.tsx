@@ -68,7 +68,7 @@ function ProjectDetail({ project, onClose }: ProjectDetailProps) {
           <button
             type="button"
             onClick={onClose}
-            className="ml-[var(--spacing-sm)] rounded-md p-1 text-foreground-muted transition-colors hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            className="ml-[var(--spacing-sm)] inline-flex items-center justify-center min-w-[44px] min-h-[44px] rounded-md text-foreground-muted transition-colors hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             aria-label="Close project details"
           >
             <svg
@@ -107,7 +107,7 @@ function ProjectDetail({ project, onClose }: ProjectDetailProps) {
             href={project.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-[var(--spacing-xs)] rounded-md bg-primary px-[var(--spacing-md)] py-[var(--spacing-sm)] text-sm font-medium text-foreground-inverse transition-colors hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            className="inline-flex items-center justify-center gap-[var(--spacing-xs)] rounded-md bg-primary min-h-[44px] px-[var(--spacing-md)] py-[var(--spacing-sm)] text-sm font-medium text-foreground-inverse transition-colors hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           >
             <svg
               width="16"
@@ -125,7 +125,7 @@ function ProjectDetail({ project, onClose }: ProjectDetailProps) {
               href={project.deploymentUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-[var(--spacing-xs)] rounded-md border border-border bg-surface-elevated px-[var(--spacing-md)] py-[var(--spacing-sm)] text-sm font-medium text-foreground transition-colors hover:bg-surface focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              className="inline-flex items-center justify-center gap-[var(--spacing-xs)] rounded-md border border-border bg-surface-elevated min-h-[44px] px-[var(--spacing-md)] py-[var(--spacing-sm)] text-sm font-medium text-foreground transition-colors hover:bg-surface focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
               <svg
                 width="16"

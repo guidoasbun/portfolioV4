@@ -11,6 +11,7 @@ import { getAssetUrl, deleteFiles } from "@/lib/s3";
 import { updateProjectRequestSchema } from "@/types/schemas";
 import type { Project, ProjectImage } from "@/types/entities";
 import type { ApiResponse } from "@/types/api";
+import { revalidateHomePage } from "@/lib/revalidate";
 
 interface ProjectDynamoItem extends DynamoDBItem {
   id: string;
@@ -256,6 +257,9 @@ export async function PUT(
       updatedAt: updatedItem.updatedAt,
     };
 
+    // Invalidate cached home page so visitors see updated project
+    revalidateHomePage();
+
     const response: ApiResponse<Project> = {
       success: true,
       data: project,
@@ -332,6 +336,9 @@ export async function DELETE(
       PK: Keys.project.pk(id),
       SK: Keys.project.sk(),
     });
+
+    // Invalidate cached home page so visitors see project removal
+    revalidateHomePage();
 
     const response: ApiResponse = {
       success: true,

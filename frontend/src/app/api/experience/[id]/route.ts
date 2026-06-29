@@ -12,6 +12,7 @@ import type { Experience } from "@/types/entities";
 import type { ApiResponse } from "@/types/api";
 import { updateExperienceRequestSchema } from "@/types/schemas";
 import { validateRequest } from "@/lib/auth";
+import { revalidateHomePage } from "@/lib/revalidate";
 
 interface ExperienceDynamoItem extends DynamoDBItem {
   id: string;
@@ -140,6 +141,9 @@ export async function PUT(
       updatedAt: updatedItem.updatedAt,
     };
 
+    // Invalidate cached home page so visitors see updated experience
+    revalidateHomePage();
+
     const response: ApiResponse<Experience> = {
       success: true,
       data: experience,
@@ -198,6 +202,9 @@ export async function DELETE(
       PK: Keys.experience.pk(id),
       SK: Keys.experience.sk(),
     });
+
+    // Invalidate cached home page so visitors see removal
+    revalidateHomePage();
 
     const response: ApiResponse = {
       success: true,

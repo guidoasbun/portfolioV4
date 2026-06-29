@@ -85,13 +85,13 @@ async function Projects() {
   return (
     <section
       id="projects"
-      className="px-[var(--spacing-lg)] py-[var(--spacing-3xl)]"
+      className="px-lg py-3xl"
       aria-labelledby="projects-heading"
     >
       <div className="mx-auto max-w-[72rem]">
         <h2
           id="projects-heading"
-          className="mb-[var(--spacing-xl)] text-center text-[length:var(--font-size-h2)] font-bold text-foreground"
+          className="mb-xl text-center text-[length:var(--font-size-h2)] font-bold text-foreground"
         >
           Projects
         </h2>

@@ -9,6 +9,7 @@ import type { DynamoDBItem } from "@/lib/dynamodb";
 import { updateAboutRequestSchema } from "@/types/schemas";
 import type { ApiResponse } from "@/types/api";
 import type { About } from "@/types/entities";
+import { revalidateHomePage } from "@/lib/revalidate";
 
 interface AboutItem extends DynamoDBItem {
   personalDescription: string;
@@ -81,6 +82,9 @@ export async function PUT(request: NextRequest): Promise<Response> {
     };
 
     await putItem(updatedItem);
+
+    // Invalidate cached home page so visitors see updated about content
+    revalidateHomePage();
 
     const data: About = {
       personalDescription: updatedItem.personalDescription,

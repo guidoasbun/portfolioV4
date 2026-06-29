@@ -75,15 +75,15 @@ export default async function About() {
     <section
       id="about"
       aria-labelledby="about-heading"
-      className="px-6 py-16 md:py-24"
+      className="px-md py-3xl md:py-4xl"
     >
       <div className="mx-auto max-w-[64rem]">
         {/* Section Header */}
         <ScrollAnimation animation="fade-in">
-          <div className="text-center mb-12">
+          <div className="text-center mb-2xl">
             <h2
               id="about-heading"
-              className="text-3xl md:text-4xl font-bold text-primary mb-3"
+              className="text-[length:var(--font-size-h2)] font-bold text-primary mb-sm"
             >
               About Me
             </h2>
@@ -95,13 +95,13 @@ export default async function About() {
 
         {/* Main Content: Introduction + Sidebar */}
         <ScrollAnimation animation="slide-up">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-lg mb-2xl">
             {/* Introduction Card */}
-            <div className="lg:col-span-2 rounded-xl border border-border bg-surface p-8">
-              <h3 className="text-xl font-semibold text-foreground mb-4">
+            <div className="lg:col-span-2 rounded-xl border border-border bg-surface p-lg md:p-xl">
+              <h3 className="text-[length:var(--font-size-h5)] font-semibold text-foreground mb-md">
                 Introduction
               </h3>
-              <div className="space-y-4 text-foreground-muted leading-relaxed">
+              <div className="space-y-md text-foreground-muted leading-relaxed">
                 <p>
                   I&apos;m a Full Stack Developer transitioning into DevOps and cloud infrastructure, with experience
                   across the full software development lifecycle. From developing React applications to
@@ -121,11 +121,11 @@ export default async function About() {
               </div>
 
               {/* Resume Buttons */}
-              <div className="flex flex-wrap items-center gap-4 mt-6">
+              <div className="flex flex-wrap items-center gap-md mt-lg">
                 <ResumeDownloadButton />
                 <Link
                   href="/resume"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-border text-foreground font-medium hover:bg-surface-elevated transition-colors"
+                  className="inline-flex items-center gap-sm min-h-[44px] px-lg py-sm rounded-lg border border-border text-foreground font-medium hover:bg-surface-elevated transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
@@ -137,11 +137,11 @@ export default async function About() {
             </div>
 
             {/* Sidebar Cards */}
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-lg">
               {/* Current Status */}
-              <div className="rounded-xl border border-border bg-surface p-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="size-3 rounded-full bg-success animate-pulse" />
+              <div className="rounded-xl border border-border bg-surface p-lg">
+                <div className="flex items-center gap-sm mb-sm">
+                  <span className="size-3 rounded-full bg-success animate-pulse" aria-hidden="true" />
                   <h4 className="font-semibold text-foreground">Current Status</h4>
                 </div>
                 <p className="text-sm text-foreground-muted">
@@ -150,9 +150,9 @@ export default async function About() {
               </div>
 
               {/* Education */}
-              <div className="rounded-xl border border-border bg-surface p-6">
-                <div className="flex items-center gap-2 mb-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 text-primary">
+              <div className="rounded-xl border border-border bg-surface p-lg">
+                <div className="flex items-center gap-sm mb-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 text-primary" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342" />
                   </svg>
                   <h4 className="font-semibold text-foreground">Education</h4>
@@ -160,19 +160,19 @@ export default async function About() {
                 <p className="font-medium text-foreground text-sm">
                   Bachelor of Science in Computer Science and Cybersecurity
                 </p>
-                <p className="text-sm text-foreground-muted mt-1">
+                <p className="text-sm text-foreground-muted mt-xs">
                   California State University Fullerton
                 </p>
-                <div className="flex items-center gap-3 mt-2 text-xs text-foreground-muted">
-                  <span className="flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-3.5">
+                <div className="flex items-center gap-sm mt-sm text-xs text-foreground-muted">
+                  <span className="flex items-center gap-xs">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-3.5" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                     </svg>
                     Fullerton, CA
                   </span>
-                  <span className="flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-3.5">
+                  <span className="flex items-center gap-xs">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-3.5" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                     </svg>
                     2021 - 2025
@@ -185,14 +185,14 @@ export default async function About() {
 
         {/* Interests & Hobbies */}
         <ScrollAnimation animation="slide-up">
-          <div className="border-t border-border pt-12">
-            <h3 className="text-xl font-semibold text-foreground mb-6">
+          <div className="border-t border-border pt-2xl">
+            <h3 className="text-[length:var(--font-size-h5)] font-semibold text-foreground mb-lg">
               Interests &amp; Hobbies
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-lg">
               {INTERESTS.map((interest) => (
-                <div key={interest.name} className="flex items-start gap-3">
-                  <span className="mt-0.5 shrink-0">{interest.icon}</span>
+                <div key={interest.name} className="flex items-start gap-sm">
+                  <span className="mt-0.5 shrink-0" aria-hidden="true">{interest.icon}</span>
                   <div>
                     <p className="font-medium text-foreground">{interest.name}</p>
                     <p className="text-sm text-foreground-muted">{interest.description}</p>

@@ -4,6 +4,7 @@ import type { Experience } from "@/types/entities";
 import type { ApiResponse } from "@/types/api";
 import { createExperienceRequestSchema } from "@/types/schemas";
 import { validateRequest } from "@/lib/auth";
+import { revalidateHomePage } from "@/lib/revalidate";
 
 /**
  * Maps a DynamoDB item to an Experience entity.
@@ -123,6 +124,9 @@ export async function POST(request: Request): Promise<Response> {
       createdAt: now,
       updatedAt: now,
     };
+
+    // Invalidate cached home page so visitors see new experience entry
+    revalidateHomePage();
 
     const response: ApiResponse<Experience> = {
       success: true,

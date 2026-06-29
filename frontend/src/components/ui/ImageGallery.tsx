@@ -78,7 +78,7 @@ function ImageGallery({ images, height = 300, className = "" }: ImageGalleryProp
         <button
           type="button"
           onClick={() => scroll("left")}
-          className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-surface-elevated/90 p-2 shadow-md transition-opacity duration-200 opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+          className="absolute left-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center min-w-[44px] min-h-[44px] rounded-full bg-surface-elevated/90 shadow-md transition-opacity duration-200 opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           aria-label="Scroll gallery left"
         >
           <svg
@@ -104,7 +104,7 @@ function ImageGallery({ images, height = 300, className = "" }: ImageGalleryProp
         <button
           type="button"
           onClick={() => scroll("right")}
-          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-surface-elevated/90 p-2 shadow-md transition-opacity duration-200 opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+          className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center min-w-[44px] min-h-[44px] rounded-full bg-surface-elevated/90 shadow-md transition-opacity duration-200 opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           aria-label="Scroll gallery right"
         >
           <svg
