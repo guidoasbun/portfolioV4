@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: `${process.env.S3_BUCKET_NAME ?? "portfolio-assets"}.s3.${process.env.AWS_REGION ?? "us-east-1"}.amazonaws.com`,
+        hostname: `${process.env.S3_BUCKET_NAME ?? "portfolio-prod-assets"}.s3.${process.env.AWS_REGION ?? "us-east-1"}.amazonaws.com`,
         pathname: "/**",
       },
       // Support S3_PUBLIC_URL pointing to a custom domain (e.g., CloudFront)

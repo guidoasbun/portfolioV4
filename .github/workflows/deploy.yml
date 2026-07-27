@@ -92,6 +92,9 @@ jobs:
           platforms: linux/arm64
           push: true
           tags: ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          build-args: |
+            S3_BUCKET_NAME=${{ vars.S3_BUCKET_NAME || 'portfolio-prod-assets' }}
+            AWS_REGION=${{ env.AWS_REGION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

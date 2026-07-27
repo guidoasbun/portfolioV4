@@ -9,6 +9,12 @@ WORKDIR /app
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Build-time args for Next.js config (remotePatterns, etc.)
+ARG S3_BUCKET_NAME=portfolio-assets
+ARG AWS_REGION=us-east-1
+ENV S3_BUCKET_NAME=${S3_BUCKET_NAME}
+ENV AWS_REGION=${AWS_REGION}
+
 # Install libc6-compat for Alpine compatibility with some npm packages
 RUN apk add --no-cache libc6-compat
 
