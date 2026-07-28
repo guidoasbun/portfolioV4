@@ -5,6 +5,7 @@
 // Entity interfaces
 export type {
   Project,
+  ProjectCategory,
   ProjectImage,
   Experience,
   Skill,
@@ -44,6 +45,7 @@ export type {
 // Zod schemas
 export {
   projectImageSchema,
+  projectCategorySchema,
   projectSchema,
   experienceSchema,
   skillSchema,

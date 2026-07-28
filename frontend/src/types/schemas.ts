@@ -24,6 +24,8 @@ export const projectImageSchema = z.object({
 
 // ─── Project ────────────────────────────────────────────────────────────────
 
+export const projectCategorySchema = z.enum(["Web", "Mobile", "CLI", "API", "DevOps", "Other"]);
+
 export const projectSchema = z.object({
   id: uuid,
   title: z.string().min(1).max(200),
@@ -31,6 +33,9 @@ export const projectSchema = z.object({
   githubUrl: urlString,
   deploymentUrl: urlString.optional(),
   published: z.boolean().default(false),
+  featured: z.boolean().default(false),
+  category: projectCategorySchema.default("Other"),
+  tags: z.array(z.string().max(50)).max(20).default([]),
   displayOrder: z.number().int().min(0),
   images: z.array(projectImageSchema).min(1).max(10),
   createdAt: isoDateTime,
@@ -148,6 +153,9 @@ export const createProjectRequestSchema = z.object({
   githubUrl: urlString,
   deploymentUrl: urlString.optional(),
   published: z.boolean().optional().default(false),
+  featured: z.boolean().optional().default(false),
+  category: projectCategorySchema.optional().default("Other"),
+  tags: z.array(z.string().max(50)).max(20).optional().default([]),
   displayOrder: z.number().int().min(0).optional().default(0),
 });
 
@@ -157,6 +165,9 @@ export const updateProjectRequestSchema = z.object({
   githubUrl: urlString.optional(),
   deploymentUrl: urlString.optional(),
   published: z.boolean().optional(),
+  featured: z.boolean().optional(),
+  category: projectCategorySchema.optional(),
+  tags: z.array(z.string().max(50)).max(20).optional(),
   displayOrder: z.number().int().min(0).optional(),
 });
 

@@ -3,7 +3,7 @@ import type { DynamoDBItem } from "@/lib/dynamodb";
 import { getAssetUrl } from "@/lib/s3";
 import { Placeholder } from "@/components/shared";
 import { ProjectGrid } from "./ProjectGrid";
-import type { Project, ProjectImage } from "@/types/entities";
+import type { Project, ProjectImage, ProjectCategory } from "@/types/entities";
 
 interface ProjectDynamoItem extends DynamoDBItem {
   id: string;
@@ -12,6 +12,9 @@ interface ProjectDynamoItem extends DynamoDBItem {
   githubUrl: string;
   deploymentUrl?: string;
   published: boolean;
+  featured?: boolean;
+  category?: string;
+  tags?: string[];
   displayOrder: number;
   createdAt: string;
   updatedAt: string;
@@ -62,6 +65,9 @@ async function getPublishedProjects(): Promise<Project[]> {
         githubUrl: item.githubUrl,
         deploymentUrl: item.deploymentUrl,
         published: item.published,
+        featured: item.featured ?? false,
+        category: (item.category as ProjectCategory) ?? "Other",
+        tags: item.tags ?? [],
         displayOrder: item.displayOrder,
         images,
         createdAt: item.createdAt,

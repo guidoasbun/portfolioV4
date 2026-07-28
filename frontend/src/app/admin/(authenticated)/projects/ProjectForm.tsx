@@ -4,8 +4,10 @@ import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import type { Project } from "@/types/entities";
+import type { Project, ProjectCategory } from "@/types/entities";
 import { ALLOWED_IMAGE_CONTENT_TYPES, IMAGE_MAX_SIZE, MAX_IMAGES_PER_PROJECT } from "@/lib/validation";
+
+const PROJECT_CATEGORIES: ProjectCategory[] = ["Web", "Mobile", "CLI", "API", "DevOps", "Other"];
 
 interface ProjectFormProps {
   /** Existing project data for editing, undefined for creating */
@@ -34,6 +36,10 @@ export function ProjectForm({ project, mode }: ProjectFormProps) {
   const [githubUrl, setGithubUrl] = useState(project?.githubUrl ?? "");
   const [deploymentUrl, setDeploymentUrl] = useState(project?.deploymentUrl ?? "");
   const [published, setPublished] = useState(project?.published ?? false);
+  const [featured, setFeatured] = useState(project?.featured ?? false);
+  const [category, setCategory] = useState<ProjectCategory>(project?.category ?? "Other");
+  const [tags, setTags] = useState<string[]>(project?.tags ?? []);
+  const [tagInput, setTagInput] = useState("");
 
   // Images
   const [images, setImages] = useState<ImageItem[]>(
@@ -288,6 +294,9 @@ export function ProjectForm({ project, mode }: ProjectFormProps) {
             githubUrl: githubUrl.trim(),
             deploymentUrl: deploymentUrl.trim() || undefined,
             published,
+            featured,
+            category,
+            tags,
             displayOrder: 0,
           }),
         });
@@ -324,6 +333,9 @@ export function ProjectForm({ project, mode }: ProjectFormProps) {
             githubUrl: githubUrl.trim(),
             deploymentUrl: deploymentUrl.trim() || undefined,
             published,
+            featured,
+            category,
+            tags,
           }),
         });
 
@@ -431,6 +443,100 @@ export function ProjectForm({ project, mode }: ProjectFormProps) {
         <label htmlFor="published" className="text-sm font-medium text-foreground">
           Published (visible on public site)
         </label>
+      </div>
+
+      {/* Featured toggle */}
+      <div className="flex items-center gap-[var(--spacing-sm)]">
+        <input
+          type="checkbox"
+          id="featured"
+          checked={featured}
+          onChange={(e) => setFeatured(e.target.checked)}
+          className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+        />
+        <label htmlFor="featured" className="text-sm font-medium text-foreground">
+          Featured (highlighted on public site)
+        </label>
+      </div>
+
+      {/* Category select */}
+      <div className="space-y-1">
+        <label htmlFor="category" className="text-sm font-medium text-foreground">
+          Category
+        </label>
+        <select
+          id="category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value as ProjectCategory)}
+          className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+        >
+          {PROJECT_CATEGORIES.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Tags input */}
+      <div className="space-y-1">
+        <label htmlFor="tags" className="text-sm font-medium text-foreground">
+          Technology Tags ({tags.length}/20)
+        </label>
+        <div className="flex flex-wrap gap-[var(--spacing-xs)] mb-2">
+          {tags.map((tag, index) => (
+            <span
+              key={index}
+              className="inline-flex items-center gap-1 rounded-md border border-border bg-surface-elevated px-2 py-1 text-xs text-foreground"
+            >
+              {tag}
+              <button
+                type="button"
+                onClick={() => setTags((prev) => prev.filter((_, i) => i !== index))}
+                className="ml-0.5 text-foreground-muted hover:text-error"
+                aria-label={`Remove tag ${tag}`}
+              >
+                &times;
+              </button>
+            </span>
+          ))}
+        </div>
+        <div className="flex gap-[var(--spacing-xs)]">
+          <input
+            id="tags"
+            type="text"
+            value={tagInput}
+            onChange={(e) => setTagInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === ",") {
+                e.preventDefault();
+                const value = tagInput.trim().replace(/,$/, "");
+                if (value && tags.length < 20 && !tags.includes(value)) {
+                  setTags((prev) => [...prev, value]);
+                  setTagInput("");
+                }
+              }
+            }}
+            placeholder="Type a tag and press Enter"
+            maxLength={50}
+            className="flex-1 rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground placeholder:text-foreground-subtle focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            disabled={tags.length >= 20}
+          />
+          <Button
+            type="button"
+            variant="ghost"
+            disabled={!tagInput.trim() || tags.length >= 20}
+            onClick={() => {
+              const value = tagInput.trim();
+              if (value && tags.length < 20 && !tags.includes(value)) {
+                setTags((prev) => [...prev, value]);
+                setTagInput("");
+              }
+            }}
+          >
+            Add
+          </Button>
+        </div>
       </div>
 
       {/* Image upload section */}

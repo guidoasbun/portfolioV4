@@ -9,7 +9,7 @@ import { getItem, queryItems, deleteItem, updateItem, Keys } from "@/lib/dynamod
 import type { DynamoDBItem } from "@/lib/dynamodb";
 import { getAssetUrl, deleteFiles } from "@/lib/s3";
 import { updateProjectRequestSchema } from "@/types/schemas";
-import type { Project, ProjectImage } from "@/types/entities";
+import type { Project, ProjectImage, ProjectCategory } from "@/types/entities";
 import type { ApiResponse } from "@/types/api";
 import { revalidateHomePage } from "@/lib/revalidate";
 
@@ -20,6 +20,9 @@ interface ProjectDynamoItem extends DynamoDBItem {
   githubUrl: string;
   deploymentUrl?: string;
   published: boolean;
+  featured?: boolean;
+  category?: string;
+  tags?: string[];
   displayOrder: number;
   createdAt: string;
   updatedAt: string;
@@ -86,6 +89,9 @@ export async function GET(
       githubUrl: projectItem.githubUrl,
       deploymentUrl: projectItem.deploymentUrl,
       published: projectItem.published,
+      featured: projectItem.featured ?? false,
+      category: (projectItem.category as ProjectCategory) ?? "Other",
+      tags: projectItem.tags ?? [],
       displayOrder: projectItem.displayOrder,
       images,
       createdAt: projectItem.createdAt,
@@ -196,6 +202,18 @@ export async function PUT(
       updateParts.push("published = :published");
       expressionAttributeValues[":published"] = data.published;
     }
+    if (data.featured !== undefined) {
+      updateParts.push("featured = :featured");
+      expressionAttributeValues[":featured"] = data.featured;
+    }
+    if (data.category !== undefined) {
+      updateParts.push("category = :category");
+      expressionAttributeValues[":category"] = data.category;
+    }
+    if (data.tags !== undefined) {
+      updateParts.push("tags = :tags");
+      expressionAttributeValues[":tags"] = data.tags;
+    }
     if (data.displayOrder !== undefined) {
       updateParts.push("displayOrder = :displayOrder");
       expressionAttributeValues[":displayOrder"] = data.displayOrder;
@@ -251,6 +269,9 @@ export async function PUT(
       githubUrl: updatedItem.githubUrl,
       deploymentUrl: updatedItem.deploymentUrl,
       published: updatedItem.published,
+      featured: updatedItem.featured ?? false,
+      category: (updatedItem.category as ProjectCategory) ?? "Other",
+      tags: updatedItem.tags ?? [],
       displayOrder: updatedItem.displayOrder,
       images,
       createdAt: updatedItem.createdAt,

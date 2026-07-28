@@ -13,6 +13,8 @@ export interface ProjectImage {
   altText?: string;
 }
 
+export type ProjectCategory = "Web" | "Mobile" | "CLI" | "API" | "DevOps" | "Other";
+
 export interface Project {
   id: string;
   title: string;
@@ -20,6 +22,9 @@ export interface Project {
   githubUrl: string;
   deploymentUrl?: string;
   published: boolean;
+  featured: boolean;
+  category: ProjectCategory;
+  tags: string[];
   displayOrder: number;
   images: ProjectImage[];
   createdAt: string;

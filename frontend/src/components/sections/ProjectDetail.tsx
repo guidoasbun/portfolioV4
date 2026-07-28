@@ -62,9 +62,14 @@ function ProjectDetail({ project, onClose }: ProjectDetailProps) {
       <div className="flex max-h-[85vh] flex-col overflow-y-auto p-[var(--spacing-lg)]">
         {/* Header */}
         <div className="mb-[var(--spacing-md)] flex items-start justify-between">
-          <h3 className="text-[length:var(--font-size-h4)] font-semibold text-foreground">
-            {project.title}
-          </h3>
+          <div>
+            <span className="mb-2 inline-block rounded-md bg-primary px-2.5 py-0.5 text-xs font-semibold text-foreground-inverse">
+              {project.category}
+            </span>
+            <h3 className="text-[length:var(--font-size-h4)] font-semibold text-foreground">
+              {project.title}
+            </h3>
+          </div>
           <button
             type="button"
             onClick={onClose}
@@ -97,9 +102,23 @@ function ProjectDetail({ project, onClose }: ProjectDetailProps) {
         )}
 
         {/* Description */}
-        <p className="mb-[var(--spacing-lg)] text-foreground-muted leading-relaxed">
+        <p className="mb-[var(--spacing-md)] text-foreground-muted leading-relaxed">
           {project.description}
         </p>
+
+        {/* Technology tags */}
+        {project.tags.length > 0 && (
+          <div className="mb-[var(--spacing-lg)] flex flex-wrap gap-2">
+            {project.tags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-md border border-border px-2.5 py-1 text-xs text-foreground-muted"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
 
         {/* Links */}
         <div className="flex flex-wrap gap-[var(--spacing-sm)]">

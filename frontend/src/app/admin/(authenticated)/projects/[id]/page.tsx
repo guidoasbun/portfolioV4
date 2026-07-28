@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 import { getItem, queryItems, Keys } from "@/lib/dynamodb";
 import type { DynamoDBItem } from "@/lib/dynamodb";
 import { getAssetUrl } from "@/lib/s3";
-import type { Project, ProjectImage } from "@/types/entities";
+import type { Project, ProjectImage, ProjectCategory } from "@/types/entities";
 import { ProjectForm } from "../ProjectForm";
 
 interface ProjectDynamoItem extends DynamoDBItem {
@@ -19,6 +19,9 @@ interface ProjectDynamoItem extends DynamoDBItem {
   githubUrl: string;
   deploymentUrl?: string;
   published: boolean;
+  featured?: boolean;
+  category?: string;
+  tags?: string[];
   displayOrder: number;
   createdAt: string;
   updatedAt: string;
@@ -63,6 +66,9 @@ async function getProject(id: string): Promise<Project | null> {
     githubUrl: projectItem.githubUrl,
     deploymentUrl: projectItem.deploymentUrl,
     published: projectItem.published,
+    featured: projectItem.featured ?? false,
+    category: (projectItem.category as ProjectCategory) ?? "Other",
+    tags: projectItem.tags ?? [],
     displayOrder: projectItem.displayOrder,
     images,
     createdAt: projectItem.createdAt,

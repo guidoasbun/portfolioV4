@@ -10,7 +10,7 @@ import { queryAllItems, queryItems, putItem, Keys } from "@/lib/dynamodb";
 import type { DynamoDBItem } from "@/lib/dynamodb";
 import { getAssetUrl } from "@/lib/s3";
 import { createProjectRequestSchema } from "@/types/schemas";
-import type { Project, ProjectImage } from "@/types/entities";
+import type { Project, ProjectImage, ProjectCategory } from "@/types/entities";
 import type { ApiResponse } from "@/types/api";
 import { revalidateHomePage } from "@/lib/revalidate";
 
@@ -21,6 +21,9 @@ interface ProjectDynamoItem extends DynamoDBItem {
   githubUrl: string;
   deploymentUrl?: string;
   published: boolean;
+  featured?: boolean;
+  category?: string;
+  tags?: string[];
   displayOrder: number;
   createdAt: string;
   updatedAt: string;
@@ -76,6 +79,9 @@ export async function GET(): Promise<Response> {
           githubUrl: item.githubUrl,
           deploymentUrl: item.deploymentUrl,
           published: item.published,
+          featured: item.featured ?? false,
+          category: (item.category as ProjectCategory) ?? "Other",
+          tags: item.tags ?? [],
           displayOrder: item.displayOrder,
           images,
           createdAt: item.createdAt,
@@ -139,6 +145,9 @@ export async function POST(request: Request): Promise<Response> {
       githubUrl: data.githubUrl,
       deploymentUrl: data.deploymentUrl,
       published: data.published,
+      featured: data.featured,
+      category: data.category,
+      tags: data.tags,
       displayOrder: data.displayOrder,
       createdAt: now,
       updatedAt: now,
@@ -151,6 +160,9 @@ export async function POST(request: Request): Promise<Response> {
       githubUrl: data.githubUrl,
       deploymentUrl: data.deploymentUrl,
       published: data.published,
+      featured: data.featured,
+      category: data.category,
+      tags: data.tags,
       displayOrder: data.displayOrder,
       images: [],
       createdAt: now,
