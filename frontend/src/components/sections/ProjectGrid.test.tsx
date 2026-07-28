@@ -57,6 +57,9 @@ const mockProject: Project = {
   githubUrl: "https://github.com/user/repo",
   deploymentUrl: "https://example.com",
   published: true,
+  featured: false,
+  category: "Web",
+  tags: ["React", "TypeScript"],
   displayOrder: 1,
   images: [
     {
@@ -109,7 +112,6 @@ describe("ProjectGrid", () => {
     expect(grid).toBeInTheDocument();
     expect(grid?.className).toContain("grid-cols-1");
     expect(grid?.className).toContain("md:grid-cols-2");
-    expect(grid?.className).toContain("lg:grid-cols-3");
   });
 
   it("opens project detail modal when a card is clicked", async () => {

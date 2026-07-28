@@ -27,6 +27,9 @@ const mockProject: Project = {
   githubUrl: "https://github.com/user/repo",
   deploymentUrl: "https://example.com",
   published: true,
+  featured: false,
+  category: "Web",
+  tags: ["React", "TypeScript"],
   displayOrder: 1,
   images: [
     {
